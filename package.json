@@ -1,0 +1,7 @@
+{
+    "id": "net_rat",
+    "title": "NetRat",
+    "version": "0.1.0",
+    "description": "Альтернативный клиент ядра Neutron",
+    "creators": ["Xertis", "Onran"]
+}

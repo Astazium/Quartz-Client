@@ -1,0 +1,16 @@
+<container size="1000,580" color='#0F1E2DB2' interval="1" context="menu">
+    <label gravity="top-left" margin="210,0,0,0">@Server list</label>
+    <panel id='server_list' pos='15,15' size='440,490' color='0' max-length='455' scrollable='true'>
+        <!-- content is generated in script -->
+    </panel>
+
+    <label gravity="top-right" margin="0,0,210,0">@Server info</label>
+    <panel id='server_info' pos='485,15' size='440,506' color='0' max-length='506' scrollable='true'>
+        <!-- content is generated in script -->
+    </panel>
+
+    <image size="5,580" src='gui/line' gravity="center-center"/>
+    <button pos='15,525' size='460,40' onclick='menu:back()'>@Back</button>
+
+</container>
+

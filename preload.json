@@ -1,0 +1,7 @@
+{
+    "textures": [
+        "gui/line",
+        "gui/rat",
+        "gui/not_connected"
+    ]
+}

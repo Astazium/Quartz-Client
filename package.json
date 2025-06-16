@@ -1,6 +1,6 @@
 {
-    "id": "net_rat",
-    "title": "NetRat",
+    "id": "quartz",
+    "title": "Quartz",
     "version": "0.1.0",
     "description": "Альтернативный клиент ядра Neutron",
     "creators": ["Xertis", "Onran"]

@@ -1,7 +1,7 @@
 <container id="serverlist_%{id}" size="400,66" color="#0F1E2DB2" hover-color="#162B3399" onclick="%{onclick}">
     <image pos='1' src='%{server_favicon}' size='64,64'></image>
     <label id="servername_%{id}" markup='md' pos="72,8">%{server_name}</label>
-    <label id="servermotd_%{id}" markup='md' pos="72,24">%{server_motd}</label>
+    <label id="serverdesc_%{id}" markup='md' pos="72,24">%{server_desc}</label>
 
     <label id="playersonline_%{id}" markup='md' pos="300,8" tooltip="" tooltip_delay="0">%{players_online}</label>
 

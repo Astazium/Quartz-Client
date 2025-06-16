@@ -64,7 +64,9 @@ function Client:tick()
             table.remove_value(self.servers, server)
         end
 
-        Client_pipe:process(server)
+        if socket and socket:is_alive() then
+            Client_pipe:process(server)
+        end
     end
 end
 

@@ -16,7 +16,9 @@ ClientPipe:add_middleware(function(server)
                 local received_any = false
                 while true do
                     local success, packet = pcall(function()
-                        return protocol.parse_packet("server", function (len) return server.network:recieve_bytes(len) end)
+                        return protocol.parse_packet("server", function (len)
+                            return server.network:recieve_bytes(len)
+                        end)
                     end)
 
                     if success and packet then
@@ -38,6 +40,10 @@ ClientPipe:add_middleware(function(server)
 end)
 
 ClientPipe:add_middleware(function(server)
+    if server.state == 0 then
+        in_menu_handlers["handshake"](server)
+    end
+
     if List.is_empty(server.received_packets) then
         return server
     end
@@ -46,7 +52,6 @@ ClientPipe:add_middleware(function(server)
 
     local success, err = pcall(function()
         if server.state ~= 3 then
-            server.fsm:handle_event(server, packet)
             in_menu_handlers[packet.packet_type](server, packet)
         elseif server.state == 3 then
             in_game_handlers[packet.packet_type](server, packet)

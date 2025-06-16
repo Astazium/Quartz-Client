@@ -60,6 +60,7 @@ end
 function protocol.parse_packet(client_or_server, data)
     local result = {}
     local buffer = nil
+
     if type(data) ~= "function" then
         buffer = protocol.create_databuffer()
         buffer:put_bytes(data)

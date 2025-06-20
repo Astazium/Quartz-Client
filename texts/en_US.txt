@@ -1,0 +1,3 @@
+Friends_online=Friends online
+Server_list=Server List
+Server_info=Information about the server

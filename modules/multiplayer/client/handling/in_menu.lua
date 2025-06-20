@@ -3,7 +3,7 @@ local protocol = require "multiplayer/protocol-kernel/protocol"
 local handlers = {}
 
 handlers[protocol.ServerMsg.StatusResponse] = function (server, packet)
-    print("Ну ку")
+    server.handlers.on_change_info(server, packet)
 end
 
 handlers["handshake"] = function (server)
@@ -17,8 +17,6 @@ handlers["handshake"] = function (server)
         server.network:send(buffer.bytes)
 
         server.state = protocol.States.Status
-
-        print("АЛЁЁЁ")
     end
 end
 

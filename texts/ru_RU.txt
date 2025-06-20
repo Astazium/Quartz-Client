@@ -1,0 +1,3 @@
+Friends_online=Друзья онлайн
+Server_list=Лист серверов
+Server_info=Информация о сервере

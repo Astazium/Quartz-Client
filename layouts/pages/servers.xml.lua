@@ -5,10 +5,13 @@ function place_server(panel, server_info, callback)
     panel:add(gui.template("server", server_info))
 end
 
+local server_list = document.server_list
+local servers_infos = {}
+
 function on_open()
     for id, server in ipairs(CONFIG.Servers) do
 
-        place_server(document.server_list, {
+        place_server(server_list, {
             id = id,
             server_favicon = "gui/not_connected",
             server_name = server.name,
@@ -24,10 +27,47 @@ function on_open()
     end
 end
 
-function handlers.on_change_info(server)
+function handlers.on_change_info(server, packet)
+    assets.load_texture(packet.favicon, server.name .. ".icon")
 
+    local friends = {}
+
+    for id, friend in ipairs(packet.friends_states) do
+        if friend == true then
+            table.insert(friends, CONFIG.Account.friends[id])
+        end
+    end
+
+    servers_infos[server.id] = {
+        name = server.name,
+        max = packet.max,
+        online = packet.online,
+        description = packet.description,
+        version = packet.version,
+        friends_online = friends
+    }
+
+    document["servericon_" .. server.id].src = server.name .. ".icon"
+    document["playersonline_" .. server.id].text = string.left_pad(string.format("%s / %s", packet.online, packet.max), 10)
+    document["serverdesc_" .. server.id].text = packet.short_desc
+    document["serverstatus_" .. server.id].text = ''
 end
 
 function handlers.on_disconnect(server)
-    document["serverstatus_" .. tostring(server.id)].text = COLORS.red .. "offline"
+    document["serverstatus_" .. server.id].text = COLORS.red .. "offline"
+end
+
+function get_info(id)
+    local info = servers_infos[id]
+    info.friends_online = info.friends_online or {}
+
+    document.version.text = info.version or "None"
+    document.description.text = info.description or "None"
+    document.friends.text = table.concat(info.friends_online, ', ')
+
+    if #info.friends_online == 0 then
+        document.friends.text = "None"
+    end
+
+    --document.description.text = string.rep("a", 1000)
 end

@@ -1,3 +1,4 @@
+local Player = require "multiplayer/classes/player"
 local protocol = require "multiplayer/protocol-kernel/protocol"
 local hash = require "lib/common/hash"
 
@@ -58,6 +59,7 @@ handlers[protocol.ServerMsg.JoinSuccess] = function (server, packet)
         rules.set(rule[1], rule[2])
     end
 
+    CLIENT_PLAYER = Player.new(hud.get_player(), CONFIG.Account.name)
     SERVER = server
 end
 

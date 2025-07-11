@@ -14,5 +14,7 @@ COLORS = {
     gray =   "[#4d4d4d]"
 }
 
+PLAYER_LIST = {}
+CLIENT_PLAYER = nil
 CLIENT = nil
 SERVER = nil

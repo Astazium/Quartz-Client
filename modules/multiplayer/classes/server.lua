@@ -1,3 +1,4 @@
+local protocol = require "multiplayer/protocol-kernel/protocol"
 local List = require "lib/common/list"
 
 local Server = {}
@@ -45,6 +46,12 @@ end
 
 function Server:set(key, val)
     self[key] = val
+end
+
+function Server:push_packet(...)
+    local buffer = protocol.create_databuffer()
+    buffer:put_packet(protocol.build_packet(...))
+    self:queue_response(buffer.bytes)
 end
 
 function Server:queue_response(event)

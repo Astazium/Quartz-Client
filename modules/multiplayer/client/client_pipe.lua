@@ -54,6 +54,7 @@ ClientPipe:add_middleware(function(server)
         if server.state ~= 3 then
             in_menu_handlers[packet.packet_type](server, packet)
         elseif server.state == 3 then
+            if not world.is_open() then return end
             in_game_handlers[packet.packet_type](server, packet)
         end
     end)

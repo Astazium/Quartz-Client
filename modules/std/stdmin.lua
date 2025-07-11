@@ -1,6 +1,13 @@
 local data_buffer = require "lib/files/bit_buffer"
 
 _G['$Neutron'] = "client"
+_G['$Multiplayer'] = {
+    side = "client",
+    api_reference = {
+        name = "Neutron",
+        versions = {1}
+    }
+}
 
 --- PLAYER
 
@@ -138,6 +145,14 @@ end
 --- TABLE
 
 table.unpack = unpack
+
+function table.rep(tbl, elem, rep_count)
+    for i=1, rep_count do
+        table.insert(tbl, table.deep_copy(elem))
+    end
+
+    return tbl
+end
 
 function table.get_default(tbl, ...)
     for _, key in ipairs({...}) do
@@ -366,6 +381,18 @@ function math.euclidian2D(x1, y1, x2, y2)
     return ((x1 - x2) ^ 2 + (y1 - y2) ^ 2) ^ 0.5
 end
 
+function math.bit_length(num)
+    if num == 0 then
+        return 0
+    end
+    local count = 0
+    while num > 0 do
+        count = count + 1
+        num = math.floor(num / 2)
+    end
+    return count
+end
+
 
 -- FUNCTIONS
 
@@ -507,38 +534,42 @@ function inventory.get_inv(invid)
     local inv_size = inventory.size(invid)
     local res_inv = {}
 
-    for slot = 0, inv_size - 1 do
-       local item_id, count = inventory.get(invid, slot)
+    for slot = 0, inv_size-1 do
+        local item_id, count = inventory.get(invid, slot)
+        local index = slot + 1
 
-       if item_id ~= 0 then
-          local item_data = inventory.get_all_data(invid, slot)
-          table.insert(res_inv, {item_id, count, item_data})
-       else
-          table.insert(res_inv, 0)
-       end
+        if item_id ~= 0 then
+            local item_data = inventory.get_all_data(invid, slot)
+            res_inv[index] = {
+                id = item_id,
+                count = count,
+                meta = item_data
+            }
+        else
+            res_inv[index] = {id = 0, count = 0}
+        end
     end
 
     return res_inv
- end
+end
 
- function inventory.set_inv(invid, res_inv)
+function inventory.set_inv(invid, res_inv)
     for i, item in ipairs(res_inv) do
-       local slot = i - 1
-       if item ~= 0 then
-          local item_id, count, item_data = unpack(item)
+        local slot = i - 1
 
-          inventory.set(invid, slot, item_id, count)
+        if item.id ~= 0 then
+            inventory.set(invid, slot, item.id, item.count)
 
-          if item_data then
-             for name, value in pairs(item_data) do
-                inventory.set_data(invid, slot, name, value)
-             end
-          end
-       else
-          inventory.set(invid, slot, 0, 0)
-       end
+            if item.meta then
+                for name, value in pairs(item.meta) do
+                    inventory.set_data(invid, slot, name, value)
+                end
+            end
+        else
+            inventory.set(invid, slot, 0, 0)
+        end
     end
- end
+end
 
 -- BIT
 

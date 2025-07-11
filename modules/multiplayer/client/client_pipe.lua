@@ -60,6 +60,7 @@ ClientPipe:add_middleware(function(server)
 
     if not success then
         logger.log("Error while reading packet: " .. err, 'E')
+        logger.log("Packet type: " .. packet.packet_type, 'E')
     end
 
     return server, not List.is_empty(server.received_packets)

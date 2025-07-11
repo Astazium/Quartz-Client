@@ -1,10 +1,7 @@
 local protocol = require "multiplayer/protocol-kernel/protocol"
+local hash = require "lib/common/hash"
 
 local handlers = {}
-
-handlers[protocol.ServerMsg.StatusResponse] = function (server, packet)
-    server.handlers.on_change_info(server, packet)
-end
 
 handlers["handshake"] = function (server)
     if server.state == 0  then
@@ -18,6 +15,50 @@ handlers["handshake"] = function (server)
 
         server.state = protocol.States.Status
     end
+end
+
+handlers[protocol.ServerMsg.StatusResponse] = function (server, packet)
+    server.handlers.on_change_info(server, packet)
+end
+
+handlers[protocol.ServerMsg.PacksList] = function (server, packet)
+    local packs = packet.packs
+    local pack_available = pack.get_available()
+    local hashes = {}
+
+    for i = #packs, 1, -1 do
+        if not table.has(pack_available, packs[i]) then
+            table.remove(packs, i)
+        end
+    end
+
+    external_app.config_packs({ PACK_ID })
+    external_app.reconfig_packs(packs, {})
+    external_app.load_content()
+
+    for i, pack in ipairs(packs) do
+        table.insert(hashes, pack)
+        table.insert(hashes, hash.hash_mods({ pack }))
+    end
+
+    CONTENT_PACKS = packs
+
+    local buffer = protocol.create_databuffer()
+    buffer:put_packet(protocol.build_packet("client", protocol.ClientMsg.PacksHashes, hashes))
+    server.network:send(buffer.bytes)
+end
+
+handlers[protocol.ServerMsg.JoinSuccess] = function (server, packet)
+    server.state = protocol.States.Active
+
+    external_app.new_world("", "41530140565755", PACK_ID .. ":void", packet.entity_id)
+    CLIENT.pid = packet.entity_id
+
+    for _, rule in ipairs(packet.rules) do
+        rules.set(rule[1], rule[2])
+    end
+
+    SERVER = server
 end
 
 return handlers

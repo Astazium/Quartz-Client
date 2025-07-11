@@ -12,18 +12,24 @@ function Client.new()
     self.servers = {}
     self.socket = nil
     self.main_server = nil
+    self.pid = 0
 
     CLIENT = self
 
     return self
 end
 
-function Client:connect(address, port, name, id, handlers)
+function Client:connect(address, port, name, state, id, handlers)
     local server = Server.new(false, nil, address, port, name)
     self.socket = socketlib.connect(address, tonumber(port), function (socket)
         local network = Network.new(socket)
         server:set("network", network)
         server.connecting = false
+        server.state = state or 0
+
+        if handlers.on_connect then
+            handlers.on_connect(server)
+        end
     end, function ()
         server.connecting = false
     end)
@@ -33,6 +39,8 @@ function Client:connect(address, port, name, id, handlers)
     server.id = id
 
     table.insert(self.servers, server)
+
+    return server
 end
 
 function Client:queue_response(event)

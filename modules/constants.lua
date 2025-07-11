@@ -2,6 +2,7 @@ CONFIG = {}
 
 PACK_ID = "quartz"
 CONFIG_PATH = pack.shared_file(PACK_ID, "config.json")
+CONTENT_PACKS = {}
 
 COLORS = {
     red =    "[#ff0000]",
@@ -14,3 +15,4 @@ COLORS = {
 }
 
 CLIENT = nil
+SERVER = nil

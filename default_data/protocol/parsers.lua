@@ -510,3 +510,179 @@ do
         ForeignDecode(data_type, result[i])
     end
 end--@
+
+-- @Inventory.write
+-- VARIABLES min_count max_count min_id max_id i slot count_ id_ has_meta needed_bits_id needed_bits_count is_empty min_id_bits min_count_bits
+-- TO_SAVE inv
+do
+    is_empty = true
+    min_count = math.huge
+    max_count = 0
+
+    min_id = math.huge
+    max_id = 0
+
+    for i=1, 40 do
+        slot = inv[i]
+        count_ = slot.count
+        id_ = slot.id
+
+        if id_ ~= 0 then
+            is_empty = false
+            min_count = math.min(min_count, count_)
+            max_count = math.max(max_count, count_)
+
+            min_id = math.min(min_id, id_)
+            max_id = math.max(max_id, id_)
+        end
+    end
+
+    buf:put_bit(is_empty)
+
+    needed_bits_id = math.bit_length(max_id-min_id)
+    needed_bits_count = math.bit_length(max_count-min_count)
+
+    if is_empty then
+        goto continue
+    end
+
+    buf:put_uint(needed_bits_id, 4)
+    buf:put_uint(needed_bits_count, 4)
+
+    min_id_bits = math.bit_length(min_id)
+    min_count_bits = math.bit_length(min_count)
+
+    buf:put_uint(min_id_bits, 4)
+    buf:put_uint(min_count_bits, 4)
+
+    buf:put_uint(min_id, min_id_bits)
+    buf:put_uint(min_count, min_count_bits)
+
+    for i=1, 40 do
+        slot = inv[i]
+
+        if slot.id ~= 0 then
+            buf:put_bit(true)
+            buf:put_uint(slot.id-min_id, needed_bits_id)
+            buf:put_uint(slot.count-min_count, needed_bits_count)
+
+            has_meta = slot.meta ~= nil
+            buf:put_bit(has_meta)
+
+            if has_meta then
+                bson.encode(buf, slot.meta)
+            end
+        else
+            buf:put_bit(false)
+        end
+    end
+
+    ::continue::
+end--@
+
+-- @Inventory.read
+-- VARIABLES needed_bits_id needed_bits_count min_id min_count has_item has_meta slot min_id_bits min_count_bits
+-- TO_LOAD inv
+do
+
+    if buf:get_bit() then
+        inv = table.rep({}, {id = 0, count = 0}, 40)
+        goto continue
+    end
+
+    needed_bits_id = buf:get_uint(4)
+    needed_bits_count = buf:get_uint(4)
+
+    min_id_bits = buf:get_uint(4)
+    min_count_bits = buf:get_uint(4)
+
+    min_id = buf:get_uint(min_id_bits)
+    min_count = buf:get_uint(min_count_bits)
+
+    inv = {}
+
+    for i = 1, 40 do
+        has_item = buf:get_bit()
+
+        if has_item then
+            slot = {}
+
+            slot.id = buf:get_uint(needed_bits_id) + min_id
+            slot.count = buf:get_uint(needed_bits_count) + min_count
+
+            has_meta = buf:get_bit()
+
+            if has_meta then
+                slot.meta = bson.decode(buf)
+            end
+
+            inv[i] = slot
+        else
+            inv[i] = {id = 0, count = 0}
+        end
+    end
+
+    ::continue::
+end--@
+
+-- @PlayerEntity.write
+-- VARIABLES has_pos has_rot has_cheats
+-- TO_SAVE player
+
+do
+    has_pos = player.pos ~= nil
+    has_rot = player.rot ~= nil
+    has_cheats = player.cheats ~= nil
+
+    buf:put_bit(has_pos)
+    buf:put_bit(has_rot)
+    buf:put_bit(has_cheats)
+
+    if has_pos then
+        buf:put_float32(player.pos.x)
+        buf:put_float32(player.pos.y)
+        buf:put_float32(player.pos.z)
+    end
+
+    if has_rot then
+        buf:put_uint24(math.floor((math.clamp(player.rot.yaw, -180, 180) + 180) / 360 * 16777215 + 0.5))
+        buf:put_uint24(math.floor((math.clamp(player.rot.pitch, -180, 180) + 180) / 360 * 16777215 + 0.5))
+    end
+
+    if has_cheats then
+        buf:put_bit(player.cheats.noclip)
+        buf:put_bit(player.cheats.flight)
+    end
+end--@
+
+-- @PlayerEntity.read
+-- VARIABLES has_pos has_rot has_cheats
+-- TO_LOAD player
+do
+    player = {}
+    has_pos = buf:get_bit()
+    has_rot = buf:get_bit()
+    has_cheats = buf:get_bit()
+
+    if has_pos then
+        player.pos = {
+            x = buf:get_float32(),
+            y = buf:get_float32(),
+            z = buf:get_float32()
+        }
+    end
+
+    if has_rot then
+        player.rot = {
+            yaw = (buf:get_uint24() / 16777215 * 360) - 180,
+            pitch = (buf:get_uint24() / 16777215 * 360) - 180
+        }
+    end
+
+    if has_cheats then
+        player.cheats = {
+            noclip = buf:get_bit(),
+            flight = buf:get_bit()
+        }
+    end
+end--@

@@ -1,3 +1,4 @@
+local protocol = require "multiplayer/protocol-kernel/protocol"
 local handlers = {}
 
 function place_server(panel, server_info, callback)
@@ -20,9 +21,8 @@ function on_open()
             players_online = ""
         })
 
-        CLIENT:connect(server.address, server.port, server.name, id, {
-            on_change_info = handlers.on_change_info,
-            on_disconnect = handlers.on_disconnect
+        CLIENT:connect(server.address, server.port, server.name, nil, id, {
+            on_change_info = handlers.on_change_info
         })
     end
 end
@@ -44,7 +44,8 @@ function handlers.on_change_info(server, packet)
         online = packet.online,
         description = packet.description,
         version = packet.version,
-        friends_online = friends
+        friends_online = friends,
+        server = server
     }
 
     document["servericon_" .. server.id].src = server.name .. ".icon"
@@ -70,4 +71,25 @@ function get_info(id)
     end
 
     --document.description.text = string.rep("a", 1000)
+end
+
+function connect(id)
+    local info = servers_infos[id]
+    local server = info.server
+
+    CLIENT:connect(server.address, server.port, server.name, protocol.States.Login, id, {
+        on_connect = function (_server)
+            print("АЛОООО ГАЛЯЯЯ")
+            local buffer = protocol.create_databuffer()
+
+            local major, minor = external_app.get_version()
+            local engine_version = string.format("%s.%s.0", major, minor)
+
+            buffer:put_packet(protocol.build_packet("client", protocol.ClientMsg.HandShake, engine_version, protocol.data.version, {}, protocol.States.Login))
+            buffer:put_packet(protocol.build_packet("client", protocol.ClientMsg.JoinGame, CONFIG.Account.name))
+            _server.network:send(buffer.bytes)
+
+            print("Мы отправили ему парашу, прямо В ЛИЦО")
+        end
+    })
 end

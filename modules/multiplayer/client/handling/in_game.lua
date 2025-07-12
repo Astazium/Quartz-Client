@@ -41,9 +41,9 @@ end
 handlers[protocol.ServerMsg.SynchronizePlayerPosition] = function (server, packet)
     local player_data = packet.data
 
-    CLIENT_PLAYER:set_pos(player_data.pos)
-    CLIENT_PLAYER:set_rot(player_data.rot)
-    CLIENT_PLAYER:set_cheats(player_data.cheats)
+    CLIENT_PLAYER:set_pos(player_data.pos, false)
+    CLIENT_PLAYER:set_rot(player_data.rot, false)
+    CLIENT_PLAYER:set_cheats(player_data.cheats, false)
 end
 
 handlers[protocol.ServerMsg.PlayerList] = function (server, packet)
@@ -88,6 +88,14 @@ end
 
 handlers[protocol.ServerMsg.KeepAlive] = function (server, packet)
     server:push_packet("client", protocol.ClientMsg.KeepAlive, packet.challenge)
+end
+
+handlers[protocol.ServerMsg.PlayerInventory] = function (server, packet)
+    CLIENT_PLAYER:set_inventory(packet.inventory, false)
+end
+
+handlers[protocol.ServerMsg.PlayerHandSlot] = function (server, packet)
+    CLIENT_PLAYER:set_slot(packet.slot, false)
 end
 
 return handlers

@@ -33,6 +33,7 @@ handlers[protocol.ServerMsg.PacksList] = function (server, packet)
         end
     end
 
+    external_app.reset_content()
     external_app.config_packs({ PACK_ID })
     external_app.reconfig_packs(packs, {})
     external_app.load_content()

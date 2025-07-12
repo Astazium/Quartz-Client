@@ -3,6 +3,8 @@ local protocol = require "multiplayer/protocol-kernel/protocol"
 local in_menu_handlers = require "multiplayer/client/handling/in_menu"
 local in_game_handlers = require "multiplayer/client/handling/in_game"
 
+local server_pipe = require "multiplayer/sending/server_pipe"
+
 local Pipeline = require "lib/common/pipeline"
 local List = require "lib/common/list"
 
@@ -68,6 +70,10 @@ ClientPipe:add_middleware(function(server)
 end)
 
 ClientPipe:add_middleware(function(server)
+    if server.state == 3 then
+        server_pipe:process(server)
+    end
+
     while not List.is_empty(server.response_queue) do
         local packet = List.popleft(server.response_queue)
         local success, err = pcall(function()

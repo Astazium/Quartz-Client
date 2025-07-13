@@ -43,3 +43,7 @@ function on_block_interact(blockid, x, y, z, playerid)
     x, y, z = block.seek_origin(x, y, z)
     sandbox.on_interact(blockid, x, y, z)
 end
+
+function on_world_open()
+    require "init/cmd"
+end

@@ -19,31 +19,31 @@ end
 
 function module.on_placed(blockid, x, y, z, states)
     if not block_in_region(x, y, z) then
-        SERVER:push_packet("client", protocol.ClientMsg.BlockUpdate, x, y, z, states, blockid)
+        SERVER:push_packet(protocol.ClientMsg.BlockUpdate, x, y, z, states, blockid)
     else
         local abs_x = x - CLIENT_PLAYER.region.x * 32
         local abs_z = z - CLIENT_PLAYER.region.z * 32
-        SERVER:push_packet("client", protocol.ClientMsg.BlockRegionUpdate, abs_x, y, abs_z, states, blockid)
+        SERVER:push_packet(protocol.ClientMsg.BlockRegionUpdate, abs_x, y, abs_z, states, blockid)
     end
 end
 
 function module.on_broken(blockid, x, y, z)
     if not block_in_region(x, y, z) then
-        SERVER:push_packet("client", protocol.ClientMsg.BlockDestroy, x, y, z)
+        SERVER:push_packet(protocol.ClientMsg.BlockDestroy, x, y, z)
     else
         local abs_x = x - CLIENT_PLAYER.region.x * 32
         local abs_z = z - CLIENT_PLAYER.region.z * 32
-        SERVER:push_packet("client", protocol.ClientMsg.BlockRegionDestroy, abs_x, y, abs_z)
+        SERVER:push_packet(protocol.ClientMsg.BlockRegionDestroy, abs_x, y, abs_z)
     end
 end
 
 function module.on_interact(blockid, x, y, z)
     if not block_in_region(x, y, z) then
-        SERVER:push_packet("client", protocol.ClientMsg.BlockInteract, x, y, z)
+        SERVER:push_packet(protocol.ClientMsg.BlockInteract, x, y, z)
     else
         local abs_x = x - CLIENT_PLAYER.region.x * 32
         local abs_z = z - CLIENT_PLAYER.region.z * 32
-        SERVER:push_packet("client", protocol.ClientMsg.BlockRegionInteract, abs_x, y, abs_z)
+        SERVER:push_packet(protocol.ClientMsg.BlockRegionInteract, abs_x, y, abs_z)
     end
 end
 

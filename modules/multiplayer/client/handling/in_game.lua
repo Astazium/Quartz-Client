@@ -87,7 +87,7 @@ handlers[protocol.ServerMsg.PlayerMoved] = function (server, packet)
 end
 
 handlers[protocol.ServerMsg.KeepAlive] = function (server, packet)
-    server:push_packet("client", protocol.ClientMsg.KeepAlive, packet.challenge)
+    server:push_packet(protocol.ClientMsg.KeepAlive, packet.challenge)
 end
 
 handlers[protocol.ServerMsg.PlayerInventory] = function (server, packet)

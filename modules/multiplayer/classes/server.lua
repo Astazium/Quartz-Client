@@ -50,7 +50,7 @@ end
 
 function Server:push_packet(...)
     local buffer = protocol.create_databuffer()
-    buffer:put_packet(protocol.build_packet(...))
+    buffer:put_packet(protocol.build_packet("client", ...))
     self:queue_response(buffer.bytes)
 end
 

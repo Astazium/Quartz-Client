@@ -47,12 +47,12 @@ handlers[protocol.ServerMsg.SynchronizePlayerPosition] = function (server, packe
 end
 
 handlers[protocol.ServerMsg.PlayerList] = function (server, packet)
-    for _, player in ipairs(packet.list) do
-        local pid = player[1]
-        local name = player[2]
+    for _, _player in ipairs(packet.list) do
+        local pid = _player[1]
+        local name = _player[2]
         if CLIENT_PLAYER.pid ~= pid then
             player.create(name, pid)
-            PLAYER_LIST[pid] = Player(pid, name)
+            PLAYER_LIST[pid] = Player.new(pid, name)
         end
     end
 end
@@ -70,7 +70,7 @@ handlers[protocol.ServerMsg.PlayerListAdd] = function (server, packet)
     local name = packet.username
     if CLIENT_PLAYER.pid ~= pid and not PLAYER_LIST[pid] then
         player.create(name, pid)
-        PLAYER_LIST[pid] = Player(pid, name)
+        PLAYER_LIST[pid] = Player.new(pid, name)
     end
 end
 
@@ -81,6 +81,8 @@ handlers[protocol.ServerMsg.PlayerMoved] = function (server, packet)
     if packet.entity_id == CLIENT_PLAYER.entity_id then return end
 
     local data = packet.data
+    print(json.tostring(packet.data))
+
     player:set_pos(data.pos)
     player:set_rot(data.rot)
     player:set_cheats(data.cheats)
@@ -95,6 +97,10 @@ handlers[protocol.ServerMsg.PlayerInventory] = function (server, packet)
 end
 
 handlers[protocol.ServerMsg.PlayerHandSlot] = function (server, packet)
+    CLIENT_PLAYER:set_slot(packet.slot, false)
+end
+
+handlers[protocol.ServerMsg.Disconnect] = function (server, packet)
     CLIENT_PLAYER:set_slot(packet.slot, false)
 end
 

@@ -24,7 +24,8 @@ end
 
 handlers[protocol.ServerMsg.PacksList] = function (server, packet)
     local packs = packet.packs
-    local pack_available = pack.get_available()
+
+    local pack_available = table.unique(table.merge(pack.get_available(), pack.get_installed()))
     local hashes = {}
 
     for i = #packs, 1, -1 do
@@ -33,17 +34,21 @@ handlers[protocol.ServerMsg.PacksList] = function (server, packet)
         end
     end
 
+    for i=1, #packs do
+        local _pack = packs[i]
+        if not table.has(CONTENT_PACKS, _pack) then
+            table.insert(CONTENT_PACKS, _pack)
+        end
+    end
+
     external_app.reset_content()
-    external_app.config_packs({ PACK_ID })
-    external_app.reconfig_packs(packs, {})
+    external_app.config_packs(CONTENT_PACKS)
     external_app.load_content()
 
     for i, pack in ipairs(packs) do
         table.insert(hashes, pack)
         table.insert(hashes, hash.hash_mods({ pack }))
     end
-
-    CONTENT_PACKS = packs
 
     local buffer = protocol.create_databuffer()
     buffer:put_packet(protocol.build_packet("client", protocol.ClientMsg.PacksHashes, hashes))

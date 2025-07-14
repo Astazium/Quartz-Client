@@ -146,6 +146,20 @@ end
 
 table.unpack = unpack
 
+function table.unique(tbl)
+    local seen = {}
+
+    for i=#tbl, 1, -1 do
+        local v = tbl[i]
+        if not seen[v] then
+            seen[v] = true
+        else
+            table.remove(tbl, i)
+        end
+    end
+    return tbl
+end
+
 function table.rep(tbl, elem, rep_count)
     for i=1, rep_count do
         table.insert(tbl, table.deep_copy(elem))

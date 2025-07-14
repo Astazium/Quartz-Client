@@ -19,5 +19,7 @@
     <image size="5,580" src='gui/line' gravity="center-center"/>
     <button pos='15,525' size='460,40' onclick='menu:back()'>@Back</button>
 
+    <button gravity="bottom-right" margin="0,0,15,15" size='460,40' onclick='menu.page="quartz_content"'>@Content</button>
+
 </container>
 

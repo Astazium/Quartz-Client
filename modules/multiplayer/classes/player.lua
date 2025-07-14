@@ -54,6 +54,7 @@ function Player:set_rot(rot, set_flag)
 
     self.rot = {yaw = rot.yaw, pitch = rot.pitch}
     player.set_rot(self.pid, rot.yaw, rot.pitch, 0)
+
     if set_flag then self.changed_flags.rot = true end
 end
 
@@ -61,8 +62,9 @@ function Player:set_cheats(cheats, set_flag)
     if cheats == nil then return end
 
     self.cheats = {noclip = cheats.noclip, flight = cheats.flight}
-    player.set_noclip(self.pid, cheats.noclip)
     player.set_flight(self.pid, cheats.flight)
+    player.set_noclip(self.pid, cheats.noclip)
+
     if set_flag then self.changed_flags.cheats = true end
 end
 

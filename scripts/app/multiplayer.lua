@@ -1,10 +1,20 @@
 app.config_packs({ "quartz" })
 app.load_content()
 
+gui_util.add_page_dispatcher(function(name, args)
+    if name == "pause" then
+        name = "quartz_pause"
+    end
+
+    return name, args
+end)
+
 require "quartz:constants"
 require "quartz:std/stdboot"
 require "quartz:init/client"
 local Client = require "quartz:multiplayer/client/client"
+
+table.insert(CONTENT_PACKS, "quartz")
 
 local client = Client.new()
 

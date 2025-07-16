@@ -3,9 +3,9 @@ local data_buffer = require "lib/files/bit_buffer"
 _G['$Neutron'] = "client"
 _G['$Multiplayer'] = {
     side = "client",
-    api_reference = {
-        name = "Neutron",
-        versions = {1}
+    pack_id = "quartz",
+    api_references = {
+        Neutron = {1}
     }
 }
 

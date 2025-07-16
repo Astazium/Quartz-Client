@@ -1,3 +1,6 @@
 Friends_online=Друзья онлайн
 Server_list=Лист серверов
 Server_info=Информация о сервере
+Nickname=Ваш никнейм
+Server_add=Добавить новый сервер
+Server_name=Название сервера

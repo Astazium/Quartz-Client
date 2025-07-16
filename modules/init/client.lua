@@ -11,7 +11,6 @@ if not file.exists(CONFIG_PATH) then
             friends = {}
         },
         Servers = {
-            {name = "Test", port = "1234", address = "123123"}
         }
     }))
 end

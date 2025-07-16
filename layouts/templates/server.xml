@@ -1,4 +1,4 @@
-<container id="serverlist_%{id}" size="400,66" color="#0F1E2DB2" hover-color="#162B3399" onclick="get_info(%{id})">
+<container id="serverdata_%{id}" size="400,66" color="#0F1E2DB2" hover-color="#162B3399" onclick="get_info(%{id})">
     <button pos="1"
             size='64,64'
             onclick="connect(%{id})">

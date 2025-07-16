@@ -1,3 +1,6 @@
 Friends_online=Friends online
 Server_list=Server List
 Server_info=Information about the server
+Nickname=Nickname
+Server_add=Add a new server
+Server_name=Server name

@@ -69,8 +69,13 @@ function get_info(id)
     if #info.friends_online == 0 then
         document.friends.text = "None"
     end
+end
 
-    --document.description.text = string.rep("a", 1000)
+function remove_server(id)
+    table.remove(CONFIG.Servers, id)
+    file.write(CONFIG_PATH, json.tostring(CONFIG))
+
+    document["serverdata_" .. id]:destruct()
 end
 
 function connect(id)
@@ -79,7 +84,6 @@ function connect(id)
 
     CLIENT:connect(server.address, server.port, server.name, protocol.States.Login, id, {
         on_connect = function (_server)
-            print("АЛОООО ГАЛЯЯЯ")
             local buffer = protocol.create_databuffer()
 
             local major, minor = external_app.get_version()
@@ -88,8 +92,6 @@ function connect(id)
             buffer:put_packet(protocol.build_packet("client", protocol.ClientMsg.HandShake, engine_version, protocol.data.version, {}, protocol.States.Login))
             buffer:put_packet(protocol.build_packet("client", protocol.ClientMsg.JoinGame, CONFIG.Account.name))
             _server.network:send(buffer.bytes)
-
-            print("Мы отправили ему парашу, прямо В ЛИЦО")
         end
     })
 end

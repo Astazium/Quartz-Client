@@ -58,6 +58,8 @@ end
 handlers[protocol.ServerMsg.JoinSuccess] = function (server, packet)
     server.state = protocol.States.Active
 
+    SERVER = server
+
     external_app.new_world("", "41530140565755", PACK_ID .. ":void", packet.entity_id)
     CLIENT.pid = packet.entity_id
 
@@ -66,7 +68,6 @@ handlers[protocol.ServerMsg.JoinSuccess] = function (server, packet)
     end
 
     CLIENT_PLAYER = Player.new(hud.get_player(), CONFIG.Account.name)
-    SERVER = server
 end
 
 return handlers

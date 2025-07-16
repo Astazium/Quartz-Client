@@ -31,6 +31,7 @@ for key, val in pairs(app) do
 end
 
 _G["external_app"] = protect_app
+_G["/$p"] = table.copy(package.loaded)
 
 while true do
     client:tick()

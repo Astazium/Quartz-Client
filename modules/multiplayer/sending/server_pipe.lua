@@ -30,4 +30,31 @@ ServerPipe:add_middleware(function(server)
     return server
 end)
 
+--Отправляем читы
+ServerPipe:add_middleware(function(server)
+    if CLIENT_PLAYER.changed_flags.cheats then
+        server:push_packet(protocol.ClientMsg.PlayerCheats, CLIENT_PLAYER.cheats.noclip, CLIENT_PLAYER.cheats.flight)
+        CLIENT_PLAYER.changed_flags.cheats = false
+    end
+    return server
+end)
+
+--Отправляем инвентарь
+ServerPipe:add_middleware(function(server)
+    if CLIENT_PLAYER.changed_flags.inv then
+        server:push_packet(protocol.ClientMsg.PlayerInventory, CLIENT_PLAYER.inv)
+        CLIENT_PLAYER.changed_flags.inv = false
+    end
+    return server
+end)
+
+--Отправляем выбранный слот
+ServerPipe:add_middleware(function(server)
+    if CLIENT_PLAYER.changed_flags.slot then
+        server:push_packet(protocol.ClientMsg.PlayerHandSlot, CLIENT_PLAYER.slot)
+        CLIENT_PLAYER.changed_flags.slot = false
+    end
+    return server
+end)
+
 return ServerPipe

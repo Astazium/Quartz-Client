@@ -1,5 +1,7 @@
 local protocol = require "multiplayer/protocol-kernel/protocol"
 local sandbox = require "multiplayer/client/sandbox"
+local utils = require "lib/utils"
+
 local buffer = {}
 function on_chunk_present(x, z)
     if #buffer < core.get_setting("chunks.load-distance") then
@@ -15,6 +17,8 @@ function on_chunk_present(x, z)
 end
 
 function on_world_tick()
+    utils.__tick()
+
     if CLIENT_PLAYER then
         CLIENT_PLAYER:tick()
     end

@@ -69,7 +69,6 @@ function Player:set_cheats(cheats, set_flag)
 end
 
 function Player:set_inventory(inv, set_flag)
-    set_flag = set_flag ~= false -- Всегда true, кроме явного false
     self.inv = inv
     inventory.set_inv(self.invid, inv)
 

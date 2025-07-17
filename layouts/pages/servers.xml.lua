@@ -89,7 +89,7 @@ function connect(id)
             local major, minor = external_app.get_version()
             local engine_version = string.format("%s.%s.0", major, minor)
 
-            buffer:put_packet(protocol.build_packet("client", protocol.ClientMsg.HandShake, engine_version, protocol.data.version, {}, protocol.States.Login))
+            buffer:put_packet(protocol.build_packet("client", protocol.ClientMsg.HandShake, engine_version, "Neutron", protocol.data.version, {}, protocol.States.Login))
             buffer:put_packet(protocol.build_packet("client", protocol.ClientMsg.JoinGame, CONFIG.Account.name))
             _server.network:send(buffer.bytes)
         end

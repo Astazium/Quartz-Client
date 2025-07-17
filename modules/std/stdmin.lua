@@ -11,6 +11,38 @@ _G['$Multiplayer'] = {
 
 --- PLAYER
 
+local set_pos = player["set_pos"]
+
+player.set_pos = function (pid, x, y, z)
+    if not _G["$Multiplayer"] then
+        set_pos(pid, x, y, z)
+        return
+    end
+
+    local entity = entities.get(player.get_entity(pid))
+
+    if entity then
+        entity.rigidbody:set_enabled(true)
+        local transform, rigidbody = entity.transform, entity.rigidbody
+        rigidbody:set_vel({0, 0, 0})
+        local current_pos = transform:get_pos()
+        local target_pos = {x, y, z}
+        local direction = vec3.sub(target_pos, current_pos)
+        local distance = vec3.length(direction)
+
+        if distance > 10 or distance < 0.01 then
+            transform:set_pos(target_pos)
+            rigidbody:set_vel({0, 0, 0})
+        elseif rigidbody then
+            local time_to_reach = 0.1
+            local velocity = vec3.mul(vec3.normalize(direction), distance / time_to_reach)
+            rigidbody:set_vel(velocity)
+        end
+    else
+        set_pos(pid, x, y, z)
+    end
+end
+
 function player.get_dir(pid)
     local yaw, pitch = player.get_rot(pid)
     local yaw_rad = math.rad(yaw)

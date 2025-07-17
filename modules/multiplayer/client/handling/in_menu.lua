@@ -10,7 +10,7 @@ handlers["handshake"] = function (server)
         local engine_version = string.format("%s.%s.0", major, minor)
 
         local buffer = protocol.create_databuffer()
-        buffer:put_packet(protocol.build_packet("client", protocol.ClientMsg.HandShake, engine_version, protocol.data.version, {}, protocol.States.Status))
+        buffer:put_packet(protocol.build_packet("client", protocol.ClientMsg.HandShake, engine_version, "Neutron", protocol.data.version, {}, protocol.States.Status))
         buffer:put_packet(protocol.build_packet("client", protocol.ClientMsg.StatusRequest))
         server.network:send(buffer.bytes)
 

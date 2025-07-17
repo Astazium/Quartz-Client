@@ -1,4 +1,4 @@
 <container size="500,200">
-    <textbox gravity="top-center" size="250,150" id='info' multiline="true" editable="false">@Connection</textbox>
+    <textbox gravity="top-center" size="250,150" id='info' multiline="true" editable="false">@Connecting</textbox>
     <button gravity="bottom-center" size="250,40" onclick='back()'>@Back</button>
 </container>

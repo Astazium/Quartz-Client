@@ -18,14 +18,16 @@ ClientPipe:add_middleware(function(server)
                 local received_any = false
                 while true do
                     local success, packet = pcall(function()
-                        return protocol.parse_packet("server", function (len)
-                            return server.network:recieve_bytes(len)
-                        end)
+                        return protocol.parse_packet("server", function (len) return server.network:recieve_bytes(len) end)
                     end)
 
                     if success and packet then
                         List.pushright(server.received_packets, packet)
                         received_any = true
+                    elseif not success then
+                        logger.log("Error while parsing packet: " .. packet .. '\n' .. "Client disconnected", 'E')
+                        if CLIENT then CLIENT:disconnect() end
+                        break
                     else
                         break
                     end

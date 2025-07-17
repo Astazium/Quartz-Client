@@ -566,14 +566,6 @@ function file.mktree(path, value)
     file.write_bytes(file.join(path), value)
 end
 
--- AUDIO
-
-audio.play_stream = function () end
-audio.play_stream_2d = function () end
-audio.play_sound = function () end
-audio.play_sound_2d = function () end
-
-
 -- INVENTORY
 
 function inventory.get_inv(invid)

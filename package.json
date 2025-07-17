@@ -2,6 +2,6 @@
     "id": "quartz",
     "title": "Quartz",
     "version": "0.1.0",
-    "description": "Альтернативный клиент ядра Neutron",
+    "description": "Клиент для серверного ядра Neutron",
     "creators": ["Xertis", "Onran"]
 }

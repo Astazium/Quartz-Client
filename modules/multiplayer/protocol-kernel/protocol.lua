@@ -8,7 +8,6 @@ function protocol.create_databuffer(bytes)
     local buf = bit_buffer:new(bytes, protocol.data.order)
 
     function buf.ownDb:put_packet(packet)
-        self:put_uint16(#packet)
         self:put_bytes(packet)
     end
 
@@ -68,7 +67,6 @@ function protocol.parse_packet(client_or_server, data)
     else
         buffer = protocol.create_databuffer()
         buffer.receive_func = data
-        buffer:get_uint16()
     end
 
     local packet_type = buffer:get_byte() + 1

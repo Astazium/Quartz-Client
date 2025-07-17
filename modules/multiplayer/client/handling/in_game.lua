@@ -1,15 +1,23 @@
 local protocol = require "multiplayer/protocol-kernel/protocol"
 local Player = require "multiplayer/classes/player"
 
-local api_events = require "api/events"
-local api_entities = require "api/entities"
-local api_env = require "api/env"
-local api_particles = require "api/particles"
-local api_audio = require "api/audio"
-local api_text3d = require "api/text3d"
-local api_wraps = require "api/wraps"
+local api_events = require "api/v1/events"
+local api_entities = require "api/v1/entities"
+local api_env = require "api/v1/env"
+local api_particles = require "api/v1/particles"
+local api_audio = require "api/v1/audio"
+local api_text3d = require "api/v1/text3d"
+local api_wraps = require "api/v1/wraps"
 
 local handlers = {}
+
+handlers[protocol.ServerMsg.Disconnect] = function (server, packet)
+    menu:reset()
+    menu.page = "quartz_connection"
+    local document = Document.new("quartz:pages/quartz_connection")
+    document.info.text = packet.reason
+    CLIENT:disconnect()
+end
 
 handlers[protocol.ServerMsg.ChunkData] = function (server, packet)
     world.set_chunk_data(packet.x, packet.z, packet.data, true)

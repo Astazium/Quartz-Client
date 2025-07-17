@@ -53,6 +53,28 @@ function Client:stop()
     self.socket:close()
 end
 
+function Client:disconnect()
+    if world.is_open() then
+        external_app.close_world()
+    end
+
+    for i=#self.servers, 1, -1 do
+        local server = self.servers[i]
+        local socket = server.network.socket
+        if socket and socket:is_alive() then
+            if server.active then
+                server.active = false
+            end
+
+            if socket and socket:is_alive() then
+                socket:close()
+            end
+
+            table.remove(self.servers, i)
+        end
+    end
+end
+
 function Client:tick()
     for index, server in ipairs(self.servers) do
         local socket = server.network.socket

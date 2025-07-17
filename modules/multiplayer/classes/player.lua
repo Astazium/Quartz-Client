@@ -38,8 +38,10 @@ end
 function Player:set_pos(pos, set_flag)
     if pos == nil then return end
 
+    local interpolated = CLIENT_PLAYER.pid ~= self.pid
+
     self.pos = {x = pos.x, y = pos.y, z = pos.z}
-    player.set_pos(self.pid, pos.x, pos.y, pos.z)
+    player.set_pos(self.pid, pos.x, pos.y, pos.z, interpolated)
 
     self.region = {
         x = math.floor(pos.x / 32),

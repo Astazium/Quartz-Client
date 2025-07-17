@@ -33,7 +33,11 @@ end
 _G["external_app"] = protect_app
 _G["/$p"] = table.copy(package.loaded)
 
-while true do
-    client:tick()
-    app.tick()
+local function main()
+    while true do
+        client:tick()
+        app.tick()
+    end
 end
+
+print(pcall(main))

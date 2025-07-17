@@ -13,8 +13,9 @@ _G['$Multiplayer'] = {
 
 local set_pos = player["set_pos"]
 
-player.set_pos = function (pid, x, y, z)
-    if not _G["$Multiplayer"] then
+player.set_pos = function (pid, x, y, z, no_interpolated)
+    no_interpolated = no_interpolated or false
+    if not _G["$Multiplayer"] or no_interpolated then
         set_pos(pid, x, y, z)
         return
     end

@@ -11,6 +11,14 @@ local api_wraps = require "api/wraps"
 
 local handlers = {}
 
+handlers[protocol.ServerMsg.Disconnect] = function (server, packet)
+    menu:reset()
+    menu.page = "quartz_connection"
+    local document = Document.new("quartz:pages/quartz_connection")
+    document.info.text = packet.reason
+    CLIENT:disconnect()
+end
+
 handlers[protocol.ServerMsg.ChunkData] = function (server, packet)
     world.set_chunk_data(packet.x, packet.z, packet.data, true)
 end

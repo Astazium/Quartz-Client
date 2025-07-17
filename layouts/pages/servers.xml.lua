@@ -94,4 +94,6 @@ function connect(id)
             _server.network:send(buffer.bytes)
         end
     })
+
+    menu.page = "quartz_connection"
 end

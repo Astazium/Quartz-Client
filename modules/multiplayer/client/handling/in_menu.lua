@@ -22,6 +22,14 @@ handlers[protocol.ServerMsg.StatusResponse] = function (server, packet)
     server.handlers.on_change_info(server, packet)
 end
 
+handlers[protocol.ServerMsg.Disconnect] = function (server, packet)
+    menu:reset()
+    menu.page = "quartz_connection"
+    local document = Document.new("quartz:pages/quartz_connection")
+    document.info.text = packet.reason
+    CLIENT:disconnect()
+end
+
 handlers[protocol.ServerMsg.PacksList] = function (server, packet)
     local packs = packet.packs
 
@@ -41,9 +49,13 @@ handlers[protocol.ServerMsg.PacksList] = function (server, packet)
         end
     end
 
+    local events_handlers = table.copy(events.handlers)
+
     external_app.reset_content()
     external_app.config_packs(CONTENT_PACKS)
     external_app.load_content()
+
+    events.handlers = events_handlers
 
     for i, pack in ipairs(packs) do
         table.insert(hashes, pack)

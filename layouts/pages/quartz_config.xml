@@ -1,6 +1,6 @@
 <container size="500,580" color='#0F1E2DB2' interval="1" context="menu">
     <label pos='15,15'>@Nickname</label>
-    <textbox consumer="username_changed" pos='15,30' size='260,30' id='username' hint='@Nickname'>Player</textbox>
+    <textbox sub-consumer="username_changed" pos='15,30' size='260,30' id='username' hint='@Nickname'>Player</textbox>
 
     <label pos='15,100'>@Server_add</label>
     <textbox pos='15,115' size='260,30' id='server_name' hint='@Server_name'></textbox>

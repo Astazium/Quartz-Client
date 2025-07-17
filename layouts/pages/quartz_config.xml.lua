@@ -1,9 +1,12 @@
+local name = nil
+
 function on_open()
+    name = CONFIG.Account.name
     document.username.text = CONFIG.Account.name
 end
 
 function username_changed(text)
-    CONFIG.Account.name = text
+    name = text
 end
 
 function add_server()
@@ -24,6 +27,8 @@ function add_server()
 end
 
 function finish()
+    CONFIG.Account.name = name
+
     file.write(CONFIG_PATH, json.tostring(CONFIG))
     menu:back()
 end

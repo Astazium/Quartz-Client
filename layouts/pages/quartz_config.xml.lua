@@ -13,7 +13,7 @@ function add_server()
     local server_ip = document.ip.text
     local server_name = document.server_name.text
 
-    if not name or not ip then
+    if not server_name or not server_ip then
         return
     end
 

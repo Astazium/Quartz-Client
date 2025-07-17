@@ -97,3 +97,8 @@ function connect(id)
 
     menu.page = "quartz_connection"
 end
+
+function main_menu()
+    external_app.reset_content()
+    menu.page="main"
+end

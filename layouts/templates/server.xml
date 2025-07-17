@@ -1,9 +1,8 @@
-<container id="serverdata_%{id}" size="400,66" color="#0F1E2DB2" hover-color="#162B3399" onclick="get_info(%{id})">
-    <button pos="1"
-            size='64,64'
-            onclick="connect(%{id})">
-        <image id="servericon_%{id}" src='%{server_favicon}' size='64,64'></image>
-    </button>
+<container id="serverdata_%{id}" size="400,80" color="#0F1E2DB2" hover-color="#162B3399" onclick="get_info(%{id})">
+
+    <image id="servericon_%{id}" onclick="connect(%{id})" interactive='true' src='%{server_favicon}'
+        size='64'
+        pos='8,8'/>
 
     <label id="servername_%{id}" markup='md' pos="72,8">%{server_name}</label>
     <label id="serverdesc_%{id}" markup='md' pos="72,24">%{server_desc}</label>

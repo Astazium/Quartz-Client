@@ -1,4 +1,4 @@
-local entities = require "api/entities"
+local entities = require "api/v1/entities"
 local utils = require "lib/utils"
 
 local uids = entities.__get_uids__()

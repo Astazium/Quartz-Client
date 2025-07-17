@@ -1,7 +1,7 @@
-local events = start_require "api/events"
-local entities = start_require "api/entities"
-local env = start_require "api/env"
-local rpc = require "api/rpc"
+local events = start_require "api/v1/events"
+local entities = start_require "api/v1/entities"
+local env = start_require "api/v1/env"
+local rpc = require "api/v1/rpc"
 local bson = require "lib/files/bson"
 
 local api = {

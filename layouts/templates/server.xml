@@ -4,8 +4,8 @@
         size='64'
         pos='8,8'/>
 
-    <label id="servername_%{id}" markup='md' pos="72,8">%{server_name}</label>
-    <label id="serverdesc_%{id}" markup='md' pos="72,24">%{server_desc}</label>
+    <label id="servername_%{id}" markup='md' pos="78,8">%{server_name}</label>
+    <label id="serverdesc_%{id}" markup='md' pos="78,24">%{server_desc}</label>
 
     <label id="playersonline_%{id}" markup='md' pos="300,8" tooltip="" tooltip_delay="0">%{players_online}</label>
 

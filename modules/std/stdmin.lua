@@ -30,8 +30,8 @@ player.set_pos = function (pid, x, y, z)
         local direction = vec3.sub(target_pos, current_pos)
         local distance = vec3.length(direction)
 
-        if distance > 10 or distance < 0.01 then
-            transform:set_pos(target_pos)
+        if distance > 5 or distance < 0.01 then
+            set_pos(pid, x, y, z)
             rigidbody:set_vel({0, 0, 0})
         elseif rigidbody then
             local time_to_reach = 0.1

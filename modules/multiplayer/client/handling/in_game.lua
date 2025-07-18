@@ -20,12 +20,12 @@ handlers[protocol.ServerMsg.Disconnect] = function (server, packet)
 end
 
 handlers[protocol.ServerMsg.ChunkData] = function (server, packet)
-    world.set_chunk_data(packet.x, packet.z, packet.data, true)
+    world.set_chunk_data(packet.x, packet.z, packet.data)
 end
 
 handlers[protocol.ServerMsg.ChunksData] = function (server, packet)
     for _, chunk in ipairs(packet.list) do
-        world.set_chunk_data(chunk[1], chunk[2], chunk[3], true)
+        world.set_chunk_data(chunk[1], chunk[2], chunk[3])
     end
 end
 
@@ -54,6 +54,7 @@ handlers[protocol.ServerMsg.ChatMessage] = function (server, packet)
     console.chat("| "..packet.message)
 end
 
+
 handlers[protocol.ServerMsg.SynchronizePlayerPosition] = function (server, packet)
     local player_data = packet.data
 
@@ -68,6 +69,7 @@ handlers[protocol.ServerMsg.PlayerList] = function (server, packet)
         local name = _player[2]
         if CLIENT_PLAYER.pid ~= pid then
             player.create(name, pid)
+            player.set_loading_chunks(pid, false)
             PLAYER_LIST[pid] = Player.new(pid, name)
         end
     end
@@ -86,6 +88,7 @@ handlers[protocol.ServerMsg.PlayerListAdd] = function (server, packet)
     local name = packet.username
     if CLIENT_PLAYER.pid ~= pid and not PLAYER_LIST[pid] then
         player.create(name, pid)
+        player.set_loading_chunks(pid, false)
         PLAYER_LIST[pid] = Player.new(pid, name)
     end
 end

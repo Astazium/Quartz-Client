@@ -75,6 +75,8 @@ handlers[protocol.ServerMsg.JoinSuccess] = function (server, packet)
     external_app.new_world("", "41530140565755", PACK_ID .. ":void", packet.entity_id)
     CLIENT.pid = packet.entity_id
 
+    CHUNK_LOADING_DISTANCE = packet.chunks_loading_distance
+
     for _, rule in ipairs(packet.rules) do
         rules.set(rule[1], rule[2])
     end

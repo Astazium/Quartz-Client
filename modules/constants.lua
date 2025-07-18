@@ -4,6 +4,8 @@ PACK_ID = "quartz"
 CONFIG_PATH = pack.shared_file(PACK_ID, "config.json")
 CONTENT_PACKS = {}
 
+CHUNK_LOADING_DISTANCE = 0
+
 COLORS = {
     red =    "[#ff0000]",
     yellow = "[#ffff00]",

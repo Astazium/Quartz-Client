@@ -22,6 +22,16 @@ function on_world_tick()
     if CLIENT_PLAYER then
         CLIENT_PLAYER:tick()
     end
+
+    local x, y, z = player.get_pos(CLIENT_PLAYER.pid)
+
+    if y < 0 or y > 255 then
+        player.set_pos(CLIENT_PLAYER.pid, x, math.clamp(y, 0, 255), z)
+    end
+
+    if external_app.get_setting("chunks.load-distance") > CHUNK_LOADING_DISTANCE then
+        external_app.set_setting("chunks.load-distance", CHUNK_LOADING_DISTANCE)
+    end
 end
 
 function on_block_placed(blockid, x, y, z, playerid)

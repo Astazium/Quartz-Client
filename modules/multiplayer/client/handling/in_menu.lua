@@ -63,6 +63,7 @@ handlers[protocol.ServerMsg.PacksList] = function (server, packet)
     end
 
     local buffer = protocol.create_databuffer()
+
     buffer:put_packet(protocol.build_packet("client", protocol.ClientMsg.PacksHashes, hashes))
     server.network:send(buffer.bytes)
 end

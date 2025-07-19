@@ -1,48 +1,7 @@
 local module = {}
 
-local function recursive_list(path)
-    local paths = {}
-    for _, unit in ipairs(file.list(path)) do
-        unit = unit:gsub(":/+", ":")
-
-        if file.isfile(unit) then
-            table.insert(paths, unit)
-        else
-            table.merge(paths, recursive_list(unit))
-        end
-    end
-
-    return paths
-end
-
-local function freeze_unpack(arr)
-    local i = 1
-    local res = {}
-
-    while arr[i] ~= nil do
-        table.insert(res, arr[i])
-        i = i + 1
-    end
-
-    return res
-end
-
 local function rightRotate(value, amount)
     return bit.bor(bit.rshift(value, amount), bit.lshift(value, 32 - amount))
-end
-
-local function get_pack_path(_pack) -- Да костыль, да я знаю, но подругому никак - пробовал
-    local path = "core:content/" .. _pack
-    local path2 = "user:content/" .. _pack
-    local path3 = _pack .. ":/"
-
-    if file.exists(path) then
-        return path
-    elseif file.exists(path2) then
-        return path2
-    elseif file.exists(path3) then
-        return path3
-    end
 end
 
 local function unpackInt32(data, offset)
@@ -160,12 +119,8 @@ function module.hash_mods(packs)
     local hash_data = "00000000"
 
     for _, pack_path in ipairs(packs) do
-        pack_path = get_pack_path(pack_path)
-        print(pack_path)
-        if not pack_path then
-            goto continue
-        end
-        local files = recursive_list(pack_path)
+        pack_path = pack_path .. ':'
+        local files = file.recursive_list(pack_path)
 
         files = table.filter(files, function (_, path)
             if string.ends_with(path, "png") or
@@ -180,13 +135,11 @@ function module.hash_mods(packs)
         end)
 
         for _, abs_file_path in ipairs(files) do
-            local file_data = freeze_unpack(file.read_bytes(abs_file_path))
-
+            local file_data = table.freeze_unpack(file.read_bytes(abs_file_path))
             hash_data = module.lite(file_data, tonumber(hash_data, 16))
         end
-
-        ::continue::
     end
+
     return hash_data
 end
 

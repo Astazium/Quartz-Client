@@ -143,40 +143,6 @@ function move_pack(id)
     refresh_changes()
 end
 
-function move_left()
-    for _, id in pairs(table.copy(packs_excluded)) do
-        if not document["pack_"..id].enabled then goto continue end
-
-        include(id, true)
-        table.insert(add_packs, id)
-        table.remove_value(rem_packs, id)
-        document["pack_"..id]:moveInto(document.packs_cur)
-
-        ::continue::
-    end
-
-    refresh_changes()
-end
-
-function move_right()
-    for _, id in pairs(table.copy(packs_included)) do
-        if not document["pack_"..id].enabled then goto continue end
-
-        include(id, false)
-
-        if table.has(packs_installed, id) then
-            table.insert(rem_packs, id)
-        end
-
-        table.remove_value(add_packs, id)
-        document["pack_"..id]:moveInto(document.packs_add)
-
-        ::continue::
-    end
-
-    refresh_changes()
-end
-
 function place_pack(panel, packinfo, callback, position_func)
     if packinfo.error then
         callback = nil

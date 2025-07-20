@@ -23,14 +23,6 @@
         size='32' margin='0,0,65,66' gravity='bottom-right'  
         color='#FFFFFF80' hover-color='#FFFFFF10'/>  
   
-    <image id="move_right" onclick='move_right()' interactive='true' src='gui/right_arrow'   
-        size='32' margin='0,0,380,64' gravity='bottom-right'  
-        color='#FFFFFF50' hover-color='#FFFFFF10'/>  
-  
-    <image id="move_left" onclick='move_left()' interactive='true' src='gui/left_arrow'   
-        size='32' margin='0,0,425,64' gravity='bottom-right'  
-        color='#FFFFFF50' hover-color='#FFFFFF10'/>  
-  
     <panel id='packs_add' pos='485,34' size='440,507' color='0' max-length='455' scrollable='true'>  
         <!-- content is generated in script -->  
     </panel>  

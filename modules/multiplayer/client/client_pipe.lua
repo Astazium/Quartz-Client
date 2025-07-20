@@ -39,6 +39,7 @@ ClientPipe:add_middleware(function(server)
         end)
         server.meta.recieve_co = co
     end
+
     coroutine.resume(co)
     return server
 end)
@@ -48,27 +49,25 @@ ClientPipe:add_middleware(function(server)
         in_menu_handlers["handshake"](server)
     end
 
-    if List.is_empty(server.received_packets) then
-        return server
-    end
+    while not List.is_empty(server.received_packets) do
+        local packet = List.popleft(server.received_packets)
 
-    local packet = List.popleft(server.received_packets)
+        local success, err = pcall(function()
+            if server.state ~= 3 then
+                in_menu_handlers[packet.packet_type](server, packet)
+            elseif server.state == 3 then
+                if not world.is_open() then return end
+                in_game_handlers[packet.packet_type](server, packet)
+            end
+        end)
 
-    local success, err = pcall(function()
-        if server.state ~= 3 then
-            in_menu_handlers[packet.packet_type](server, packet)
-        elseif server.state == 3 then
-            if not world.is_open() then return end
-            in_game_handlers[packet.packet_type](server, packet)
+        if not success then
+            logger.log("Error while reading packet: " .. err, 'E')
+            logger.log("Packet type: " .. packet.packet_type, 'E')
         end
-    end)
-
-    if not success then
-        logger.log("Error while reading packet: " .. err, 'E')
-        logger.log("Packet type: " .. packet.packet_type, 'E')
     end
 
-    return server, not List.is_empty(server.received_packets)
+    return server
 end)
 
 ClientPipe:add_middleware(function(server)

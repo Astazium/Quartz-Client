@@ -71,6 +71,7 @@ function Player:set_cheats(cheats, set_flag)
 end
 
 function Player:set_inventory(inv, set_flag)
+    if inv == nil then return end
     self.inv = inv
     inventory.set_inv(self.invid, inv)
 
@@ -78,6 +79,7 @@ function Player:set_inventory(inv, set_flag)
 end
 
 function Player:set_slot(slot_id, set_flag)
+    if slot_id == nil then return end
     self.slot = slot_id
     player.set_selected_slot(self.pid, slot_id)
 

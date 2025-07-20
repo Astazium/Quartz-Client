@@ -21,16 +21,24 @@ end
 
 handlers[protocol.ServerMsg.ChunkData] = function (server, packet)
     world.set_chunk_data(packet.x, packet.z, packet.data)
+    local pos = CACHED_DATA.pos
+    if not pos then return end
+
+    if math.floor(pos.x) == packet.x and math.floor(pos.z / 16) == packet.z then
+        CACHED_DATA.over = true
+    end
 end
 
 handlers[protocol.ServerMsg.ChunksData] = function (server, packet)
     for _, chunk in ipairs(packet.list) do
         world.set_chunk_data(chunk[1], chunk[2], chunk[3])
+        local pos = CACHED_DATA.pos
+        if pos then
+            if math.floor(pos.x / 16) == chunk[1] and math.floor(pos.z / 16) == chunk[2] then
+                CACHED_DATA.over = true
+            end
+        end
     end
-end
-
-handlers[protocol.ServerMsg.PlayerHandSlot] = function (server, packet)
-    player.set_selected_slot(hud.get_player(), packet.slot)
 end
 
 handlers[protocol.ServerMsg.BlockChanged] = function (server, packet)
@@ -61,6 +69,10 @@ handlers[protocol.ServerMsg.SynchronizePlayerPosition] = function (server, packe
     CLIENT_PLAYER:set_pos(player_data.pos, false)
     CLIENT_PLAYER:set_rot(player_data.rot, false)
     CLIENT_PLAYER:set_cheats(player_data.cheats, false)
+
+    CACHED_DATA.pos = player_data.pos
+    CACHED_DATA.rot = player_data.rot
+    CACHED_DATA.cheats = player_data.cheats
 end
 
 handlers[protocol.ServerMsg.PlayerList] = function (server, packet)
@@ -112,10 +124,12 @@ end
 
 handlers[protocol.ServerMsg.PlayerInventory] = function (server, packet)
     CLIENT_PLAYER:set_inventory(packet.inventory, false)
+    CACHED_DATA.inv = packet.inventory
 end
 
 handlers[protocol.ServerMsg.PlayerHandSlot] = function (server, packet)
-    CLIENT_PLAYER:set_slot(packet.slot, false)
+    player.set_selected_slot(hud.get_player(), packet.slot)
+    CACHED_DATA.slot = packet.slot
 end
 
 handlers[protocol.ServerMsg.Disconnect] = function (server, packet)

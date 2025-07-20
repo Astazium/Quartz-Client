@@ -29,6 +29,14 @@ function on_world_tick()
         player.set_pos(CLIENT_PLAYER.pid, x, math.clamp(y, 0, 255), z)
     end
 
+    if not CACHED_DATA.over then
+        CLIENT_PLAYER:set_pos(CACHED_DATA.pos, false)
+        CLIENT_PLAYER:set_rot(CACHED_DATA.rot, false)
+        CLIENT_PLAYER:set_cheats(CACHED_DATA.cheats, false)
+        CLIENT_PLAYER:set_inventory(CACHED_DATA.inv, false)
+        CLIENT_PLAYER:set_slot(CACHED_DATA.slot, false)
+    end
+
     if external_app.get_setting("chunks.load-distance") > CHUNK_LOADING_DISTANCE then
         external_app.set_setting("chunks.load-distance", CHUNK_LOADING_DISTANCE)
     end

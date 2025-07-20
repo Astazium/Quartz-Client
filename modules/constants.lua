@@ -6,6 +6,8 @@ CONTENT_PACKS = {}
 
 CHUNK_LOADING_DISTANCE = 0
 
+CACHED_DATA = {over = false}
+
 COLORS = {
     red =    "[#ff0000]",
     yellow = "[#ffff00]",

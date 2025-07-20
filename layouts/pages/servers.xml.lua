@@ -60,6 +60,8 @@ end
 
 function get_info(id)
     local info = servers_infos[id]
+    if not info then return end
+
     info.friends_online = info.friends_online or {}
 
     document.version.text = info.version or "None"
@@ -80,6 +82,8 @@ end
 
 function connect(id)
     local info = servers_infos[id]
+    if not info then return end
+
     local server = info.server
 
     CLIENT:connect(server.address, server.port, server.name, protocol.States.Login, id, {

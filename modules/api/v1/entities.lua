@@ -18,7 +18,7 @@ entities.spawn = function(name, ...)
     local source_path = debug.getinfo(2, "S").source
     local prefix = parse_path(source_path) or ""
 
-    if desynced_entities[name] or prefix:find("multiplayer") then
+    if desynced_entities[name] or prefix:find(PACK_ID) then
         return original_spawn(name, ...)
     end
 

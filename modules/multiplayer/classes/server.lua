@@ -48,10 +48,10 @@ function Server:set(key, val)
     self[key] = val
 end
 
-function Server:push_packet(packet_type, ...)
+function Server:push_packet(...)
     local buffer = protocol.create_databuffer()
-    buffer:put_packet(protocol.build_packet("client", packet_type, ...))
-    self.network:send(buffer.bytes)
+    buffer:put_packet(protocol.build_packet("client", ...))
+    self:queue_response(buffer.bytes)
 end
 
 function Server:queue_response(event)

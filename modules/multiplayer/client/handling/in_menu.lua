@@ -19,6 +19,7 @@ handlers["handshake"] = function (server)
 end
 
 handlers[protocol.ServerMsg.StatusResponse] = function (server, packet)
+    server.network.socket:close()
     server.handlers.on_change_info(server, packet)
 end
 

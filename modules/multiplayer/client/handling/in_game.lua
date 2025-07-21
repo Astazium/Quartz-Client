@@ -235,4 +235,14 @@ handlers[ protocol.ServerMsg.Text3DAxis ] = function (server, packet)
     api_text3d.apply(state)
 end
 
+handlers[ protocol.ServerMsg.BlockInventory ] = function (server, packet)
+    local invid = inventory.get_block(packet.x, packet.y, packet.z)
+    inventory.set_inv(invid, packet.inventory)
+end
+
+handlers[ protocol.ServerMsg.BlockInventorySlot ] = function (server, packet)
+    local invid = inventory.get_block(packet.x, packet.y, packet.z)
+    inventory.set(invid, packet.slot_id, packet.item_id, packet.item_count)
+end
+
 return handlers

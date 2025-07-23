@@ -24,7 +24,10 @@ handlers[protocol.ServerMsg.StatusResponse] = function (server, packet)
 end
 
 handlers[protocol.ServerMsg.Disconnect] = function (server, packet)
-    leave_to_menu(packet.reason)
+    menu:reset()
+    menu.page = "quartz_connection"
+    local document = Document.new("quartz:pages/quartz_connection")
+    document.info.text = packet.reason
     CLIENT:disconnect()
 end
 

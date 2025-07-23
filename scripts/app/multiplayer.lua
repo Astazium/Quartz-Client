@@ -9,6 +9,32 @@ gui_util.add_page_dispatcher(function(name, args)
     return name, args
 end)
 
+_G["leave_to_menu"] = function (reason)
+    if world.is_open() then
+        app.close_world(false)
+        menu.page = "menu"
+    end
+
+    app.reset_content()
+    menu:reset()
+    menu.page = "menu"
+end
+
+-- _G["leave_to_menu"] = function (reason)
+--     if world.is_open() then
+--         app.close_world(false)
+--     end
+
+--     app.reset_content()
+--     menu:reset()
+--     app.config_packs({PACK_ID})
+--     app.load_content()
+--     menu.page = "quartz_connection"
+
+--     local document = Document.new("quartz:pages/quartz_connection")
+--     document.info.text = reason or "@menu.Unexpect_Disconnected"
+-- end
+
 require "quartz:constants"
 require "quartz:std/stdboot"
 require "quartz:init/client"

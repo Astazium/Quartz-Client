@@ -15,6 +15,11 @@ function Player.new(pid, name, pos, rot, cheats)
     self.rot = rot or {yaw = 0, pitch = 0}
     self.cheats = cheats or {noclip = false, flight = false}
     self.active = true
+    self.ping = {
+        ping = -1,
+        last_upd = 0
+    }
+
     self.id = max_id
 
     self.changed_flags = {

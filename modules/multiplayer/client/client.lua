@@ -85,11 +85,7 @@ function Client:tick()
 
             local global_server = SERVER or {}
             if server.id == global_server.id then
-                external_app.close_world()
-                menu:reset()
-                menu.page = "quartz_connection"
-                local document = Document.new("quartz:pages/quartz_connection")
-                document.info.text = "@Disconnect"
+                leave_to_menu()
             end
 
             if socket and socket:is_alive() then

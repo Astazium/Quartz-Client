@@ -5,4 +5,5 @@ Nickname=Ваш никнейм
 Server_add=Добавить новый сервер
 Server_name=Название сервера
 Connecting=Подключение...
-Unexpect_Disconnected=Сервер внезапно отключился, соединение с сервером потеряно
+menu.Unexpect_Disconnected=Сервер внезапно отключился, соединение с сервером потеряно
+quartz.player_list=Список игроков

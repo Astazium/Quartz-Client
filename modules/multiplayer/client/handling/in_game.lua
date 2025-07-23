@@ -12,10 +12,7 @@ local api_wraps = require "api/v1/wraps"
 local handlers = {}
 
 handlers[protocol.ServerMsg.Disconnect] = function (server, packet)
-    menu:reset()
-    menu.page = "quartz_connection"
-    local document = Document.new("quartz:pages/quartz_connection")
-    document.info.text = packet.reason
+    leave_to_menu(packet.reason)
     CLIENT:disconnect()
 end
 
@@ -119,6 +116,8 @@ handlers[protocol.ServerMsg.PlayerMoved] = function (server, packet)
 end
 
 handlers[protocol.ServerMsg.KeepAlive] = function (server, packet)
+    CLIENT_PLAYER.ping.last_upd = time.uptime()
+
     server:push_packet(protocol.ClientMsg.KeepAlive, packet.challenge)
 end
 

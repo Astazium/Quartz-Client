@@ -6,4 +6,5 @@ Server_add=Add a new server
 Server_name=Server name
 menu.Apply=Apply
 Connecting=Connecting...
-Unexpect_Disconnected=Server unexpectedly shut down, client disconnected
+menu.Unexpect_Disconnected=Server unexpectedly shut down, client disconnected
+quartz.player_list=Player list

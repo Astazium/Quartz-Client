@@ -1,7 +1,19 @@
-<panel size='400' color='0' interval='1' context='menu'>
-    <button onclick='menu:reset()'>@Continue</button>
-    <button onclick='menu.page="settings"'>@Settings</button>
-    <button onclick='leave()'>
-        @Save and Quit to Menu
-    </button>
-</panel>
+
+<container size="600,380" color='#0F1E2DB2' interval="1" context="menu">
+    <panel id="player_list" pos='230,15' size='355,380' color='0' max-length='365' scrollable='true'>
+        <!-- content is generated in script -->
+    </panel>
+
+    <label id="ping" gravity="bottom-left" margin="15,0,0,15">Ping: -1ms</label>
+    <label id="pid" gravity="bottom-left" margin="15,0,0,40">Pid: -1</label>
+
+    <panel pos="15,15" size="200,380" color="#00000000">
+        <button onclick='menu:reset()'>@Continue</button>
+        <label/>
+        <label/>
+        <button onclick='menu.page="settings"'>@Settings</button>
+        <label/>
+        <label/>
+        <button onclick='leave()'>@Save and Quit to Menu</button>
+    </panel>
+</container>

@@ -10,7 +10,7 @@ handlers["handshake"] = function (server)
         local engine_version = string.format("%s.%s.0", major, minor)
 
         local buffer = protocol.create_databuffer()
-        buffer:put_packet(protocol.build_packet("client", protocol.ClientMsg.HandShake, engine_version, "Neutron", protocol.data.version, {}, protocol.States.Status))
+        buffer:put_packet(protocol.build_packet("client", protocol.ClientMsg.HandShake, engine_version, "Neutron", protocol.data.version, CONFIG.Account.friends, protocol.States.Status))
         buffer:put_packet(protocol.build_packet("client", protocol.ClientMsg.StatusRequest))
         server.network:send(buffer.bytes)
 
@@ -19,15 +19,11 @@ handlers["handshake"] = function (server)
 end
 
 handlers[protocol.ServerMsg.StatusResponse] = function (server, packet)
-    server.network.socket:close()
     server.handlers.on_change_info(server, packet)
 end
 
 handlers[protocol.ServerMsg.Disconnect] = function (server, packet)
-    menu:reset()
-    menu.page = "quartz_connection"
-    local document = Document.new("quartz:pages/quartz_connection")
-    document.info.text = packet.reason
+    leave_to_menu(packet.reason)
     CLIENT:disconnect()
 end
 

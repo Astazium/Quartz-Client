@@ -18,7 +18,7 @@ function Server.new(active, network, address, port, name)
     self.connecting = true
     self.tries = 0
     self.ping = {ping = 0, last_upd = 0}
-    self.meta = {}
+    self.meta = {max_online = 0}
 
     self.handlers = {
         on_connect = nil,

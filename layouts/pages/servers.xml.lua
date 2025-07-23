@@ -48,6 +48,10 @@ function handlers.on_change_info(server, packet)
         server = server
     }
 
+    if table.count_pairs(friends) > 0 then
+        document["serverdata_" .. server.id].color = {139, 0, 255, 64}
+    end
+
     document["servericon_" .. server.id].src = server.name .. ".icon"
     document["playersonline_" .. server.id].text = string.left_pad(string.format("%s / %s", packet.online, packet.max), 10)
     document["serverdesc_" .. server.id].text = packet.short_desc
@@ -88,6 +92,7 @@ function connect(id)
 
     CLIENT:connect(server.address, server.port, server.name, protocol.States.Login, id, {
         on_connect = function (_server)
+            _server.meta.max_online = info.max
             local buffer = protocol.create_databuffer()
 
             local major, minor = external_app.get_version()

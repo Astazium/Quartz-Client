@@ -4,16 +4,15 @@
         <!-- content is generated in script -->
     </panel>
 
-    <label id="ping" gravity="bottom-left" margin="15,0,0,15">Ping: -1ms</label>
-    <label id="pid" gravity="bottom-left" margin="15,0,0,40">Pid: -1</label>
+    <image id="cross" gravity="center-right" margin="0,0,125,0" src='gui/sad' size='128'/>
 
-    <panel pos="15,15" size="200,380" color="#00000000">
+    <label id="online" gravity="bottom-left" margin="15,0,0,15">Online: 0/0</label>
+    <label id="ping" gravity="bottom-left" margin="15,0,0,40">Ping: -1ms</label>
+    <label id="pid" gravity="bottom-left" margin="15,0,0,65">Pid: -1</label>
+
+    <panel pos="15,15" size="200,380" color="#00000000" interval="30">
         <button onclick='menu:reset()'>@Continue</button>
-        <label/>
-        <label/>
         <button onclick='menu.page="settings"'>@Settings</button>
-        <label/>
-        <label/>
         <button onclick='leave()'>@Save and Quit to Menu</button>
     </panel>
 </container>

@@ -11,6 +11,20 @@ local api_wraps = require "api/v1/wraps"
 
 local handlers = {}
 
+local materials_sounds = pack.get_info("base").path
+local function playMaterialSound(blockid, x, y, z, context)
+    local block_material = (block.material(blockid):match("^[^:]*:(.+)$") or block.material(blockid))
+    if not block_material then return end
+    -- парсинг
+    local content = file.read(file.join(materials_sounds, "/block_materials/" .. block_material .. ".json"))
+    local data = json.parse(content)
+    if not data then return end
+
+    local sound = data[context]
+    if not sound then return end
+    audio.play_sound(sound, x, y, z, 1, 1)
+end
+
 handlers[protocol.ServerMsg.Disconnect] = function (server, packet)
     leave_to_menu(packet.reason)
     CLIENT:disconnect()
@@ -39,6 +53,20 @@ handlers[protocol.ServerMsg.ChunksData] = function (server, packet)
 end
 
 handlers[protocol.ServerMsg.BlockChanged] = function (server, packet)
+    local new_id = packet.block_id
+
+    local old_id = block.get(packet.x, packet.y, packet.z)
+    if old_id == -1 then
+        return
+    end
+
+    if old_id ~= 0 and new_id == 0 then
+        playMaterialSound(old_id, packet.x, packet.y, packet.z, "break-sound")
+    elseif old_id == 0 and new_id ~= 0 then
+        playMaterialSound(new_id, packet.x, packet.y, packet.z, "place-sound")
+    end
+
+    -- ориг
     local pid = packet.pid
 
     if pid == 0 then

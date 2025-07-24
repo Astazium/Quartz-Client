@@ -19,6 +19,7 @@ COLORS = {
 }
 
 PLAYER_LIST = {}
+TEMP_PLAYERS = {}
 CLIENT_PLAYER = nil
 CLIENT = nil
 SERVER = nil

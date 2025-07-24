@@ -49,7 +49,7 @@ function handlers.on_change_info(server, packet)
     }
 
     if table.count_pairs(friends) > 0 then
-        document["serverdata_" .. server.id].color = {139, 0, 255, 64}
+        document["serverdata_" .. server.id].color = {139, 0, 255, 32}
     end
 
     document["servericon_" .. server.id].src = server.name .. ".icon"

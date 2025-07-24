@@ -93,7 +93,7 @@ end
 
 function Player:__check_pos()
     local x, y, z = player.get_pos(self.pid)
-    if math.euclidian3D(self.pos.x, self.pos.y, self.pos.z, x, y, z) > 0.01 then
+    if math.euclidian3D(self.pos.x, self.pos.y, self.pos.z, x, y, z) > 0.05 then
         self.pos = {x = x, y = y, z = z}
         self.changed_flags.pos = true
     end

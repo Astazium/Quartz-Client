@@ -99,18 +99,40 @@ handlers[protocol.ServerMsg.PlayerListAdd] = function (server, packet)
         player.create(name, pid)
         player.set_loading_chunks(pid, false)
         PLAYER_LIST[pid] = Player.new(pid, name)
+
+        local data = TEMP_PLAYERS[pid]
+        if data then
+            handlers[protocol.ServerMsg.PlayerMoved](server, {
+                entity_id = pid,
+                data = data
+            })
+        end
     end
 end
 
 handlers[protocol.ServerMsg.PlayerMoved] = function (server, packet)
     local player = PLAYER_LIST[packet.entity_id]
 
-    if not player then return end
+    if not player then
+        TEMP_PLAYERS[packet.entity_id] = packet.data
+        return
+    end
+
     if packet.entity_id == CLIENT_PLAYER.entity_id then return end
 
     local data = packet.data
 
-    player:set_pos(data.pos)
+    if data.pos and data.compressed then
+        local x, y, z = player.pos.x, player.pos.y, player.pos.z
+        player:set_pos({
+            x = x + data.pos.x,
+            y = y + data.pos.y,
+            z = z + data.pos.z
+        })
+    elseif data.pos then
+        player:set_pos(data.pos)
+    end
+
     player:set_rot(data.rot)
     player:set_cheats(data.cheats)
 end

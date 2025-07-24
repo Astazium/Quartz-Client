@@ -61,6 +61,18 @@ handlers[protocol.ServerMsg.BlockChanged] = function (server, packet)
     end
 
     if old_id ~= 0 and new_id == 0 then
+        if gfx then
+				gfx.particles.emit({packet.x+0.5, packet.y+0.5, packet.z+0.5}, 64, {
+				lifetime=1.0,
+				spawn_interval=0.0001,
+				explosion={4, 4, 4},
+				texture="blocks:"..block.get_textures(old_id)[1],
+				random_sub_uv=0.1,
+				size={0.1, 0.1, 0.1},
+				spawn_shape="box",
+				spawn_spread={0.4, 0.4, 0.4}
+			})
+		end
         playMaterialSound(old_id, packet.x, packet.y, packet.z, "break-sound")
     elseif old_id == 0 and new_id ~= 0 then
         playMaterialSound(new_id, packet.x, packet.y, packet.z, "place-sound")

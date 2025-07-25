@@ -4,7 +4,7 @@ local utils = require "lib/utils"
 
 local buffer = {}
 function on_chunk_present(x, z)
-    if #buffer < core.get_setting("chunks.load-distance") then
+    if #buffer < (core.get_setting("chunks.load-distance")^2) / 2 then
         table.insert(buffer, x)
         table.insert(buffer, z)
         return

@@ -1,12 +1,12 @@
 local Pipeline = require "lib/common/pipeline"
 local protocol = require "multiplayer/protocol-kernel/protocol"
+local sandbox = require "multiplayer/client/sandbox"
 
 local ServerPipe = Pipeline.new()
 
 --А мы вообще норм?
 ServerPipe:add_middleware(function(server)
     if not CACHED_DATA.over then return end
-
     return server
 end)
 
@@ -25,6 +25,14 @@ ServerPipe:add_middleware(function(server)
         server:push_packet(protocol.ClientMsg.PlayerPosition, {CLIENT_PLAYER.pos.x, CLIENT_PLAYER.pos.y, CLIENT_PLAYER.pos.z})
         CLIENT_PLAYER.changed_flags.pos = false
     end
+    return server
+end)
+
+--Отправляем наши блоки
+ServerPipe:add_middleware(function(server)
+    server:queue_response(sandbox.get_bytes())
+    sandbox.reset_buffer()
+
     return server
 end)
 

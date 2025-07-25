@@ -1,5 +1,5 @@
 local protocol = require "multiplayer/protocol-kernel/protocol"
-local sandbox = require "multiplayer/client/sandbox"
+local sandbox = start_require "multiplayer/client/sandbox"
 local utils = require "lib/utils"
 
 local buffer = {}

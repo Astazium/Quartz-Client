@@ -102,6 +102,7 @@ handlers[protocol.ServerMsg.PlayerListAdd] = function (server, packet)
 
         local data = TEMP_PLAYERS[pid]
         if data then
+            TEMP_PLAYERS[pid] = nil
             handlers[protocol.ServerMsg.PlayerMoved](server, {
                 entity_id = pid,
                 data = data

@@ -11,20 +11,6 @@ local api_wraps = require "api/v1/wraps"
 
 local handlers = {}
 
-local materials_sounds = pack.get_info("base").path
-local function playMaterialSound(blockid, x, y, z, context)
-    local block_material = (block.material(blockid):match("^[^:]*:(.+)$") or block.material(blockid))
-    if not block_material then return end
-    -- парсинг
-    local content = file.read(file.join(materials_sounds, "/block_materials/" .. block_material .. ".json"))
-    local data = json.parse(content)
-    if not data then return end
-
-    local sound = data[context]
-    if not sound then return end
-    audio.play_sound(sound, x, y, z, 1, 1)
-end
-
 handlers[protocol.ServerMsg.Disconnect] = function (server, packet)
     leave_to_menu(packet.reason)
     CLIENT:disconnect()
@@ -53,36 +39,27 @@ handlers[protocol.ServerMsg.ChunksData] = function (server, packet)
 end
 
 handlers[protocol.ServerMsg.BlockChanged] = function (server, packet)
-    local new_id = packet.block_id
+	local new_id = packet.block_id
+    local new_states = packet.block_state
 
     local old_id = block.get(packet.x, packet.y, packet.z)
+    local old_states = block.get_states(packet.x, packet.y, packet.z)
     if old_id == -1 then
         return
     end
-
-    if old_id ~= 0 and new_id == 0 then
-        if gfx then
-				gfx.particles.emit({packet.x+0.5, packet.y+0.5, packet.z+0.5}, 64, {
-				lifetime=1.0,
-				spawn_interval=0.0001,
-				explosion={4, 4, 4},
-				texture="blocks:"..block.get_textures(old_id)[1],
-				random_sub_uv=0.1,
-				size={0.1, 0.1, 0.1},
-				spawn_shape="box",
-				spawn_spread={0.4, 0.4, 0.4}
-			})
-		end
-        playMaterialSound(old_id, packet.x, packet.y, packet.z, "break-sound")
-    elseif old_id == 0 and new_id ~= 0 then
-        playMaterialSound(new_id, packet.x, packet.y, packet.z, "place-sound")
-    end
-
-    -- ориг
+	
     local pid = packet.pid
 
     if pid == 0 then
         pid = -1
+    end
+
+	if old_id ~= 0 and new_id == 0 then
+        block.destruct(packet.x, packet.y, packet.z, packet.pid)
+    elseif old_id == 0 and new_id ~= 0 then
+        block.place(packet.x, packet.y, packet.z, new_id, new_states, packet.pid)
+    elseif old_id == new_id and old_states ~= new_states then
+
     end
 
     block.set(packet.x, packet.y, packet.z, packet.block_id, packet.block_state, pid)

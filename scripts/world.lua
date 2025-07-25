@@ -6,8 +6,6 @@ local buffer = {}
 local loaded_chunks = {}
 function on_chunk_present(x, z)
     if #buffer < (core.get_setting("chunks.load-distance")^2) / 2 then
-        table.insert(buffer, x)
-        table.insert(buffer, z)
         if not loaded_chunks[x .. '/' .. z] then
             table.insert(buffer, x)
             table.insert(buffer, z)

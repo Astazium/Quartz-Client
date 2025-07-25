@@ -3,17 +3,23 @@ local sandbox = start_require "multiplayer/client/sandbox"
 local utils = require "lib/utils"
 
 local buffer = {}
+local loaded_chunks = {}
 function on_chunk_present(x, z)
     if #buffer < (core.get_setting("chunks.load-distance")^2) / 2 then
-        table.insert(buffer, x)
-        table.insert(buffer, z)
+        if not loaded_chunks[x .. '/' .. z] then
+            table.insert(buffer, x)
+            table.insert(buffer, z)
+            loaded_chunks[x .. '/' .. z] = true
+        end
         return
     end
 
-    local packet = protocol.create_databuffer()
-    packet:put_packet(protocol.build_packet("client", protocol.ClientMsg.RequestChunks, buffer))
-    SERVER.network:send(packet.bytes)
+    SERVER:push_packet(protocol.ClientMsg.RequestChunks, buffer)
     buffer = {x, z}
+end
+
+function on_chunk_remove(x, z)
+    loaded_chunks[x .. '/' .. z] = nil
 end
 
 function on_world_tick()

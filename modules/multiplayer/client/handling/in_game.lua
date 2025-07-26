@@ -39,28 +39,25 @@ handlers[protocol.ServerMsg.ChunksData] = function (server, packet)
 end
 
 handlers[protocol.ServerMsg.BlockChanged] = function (server, packet)
-    local new_id = packet.block_id
-    local new_states = packet.block_state
+    local pid = packet.pid
+    if pid == 0 then pid = -1 end
 
     local old_id = block.get(packet.x, packet.y, packet.z)
-    local old_states = block.get_states(packet.x, packet.y, packet.z)
-    if old_id == -1 then
-        return
-    end
-	
-    local pid = packet.pid
+    local new_id = packet.block_id
 
-    if pid == 0 then
-        pid = -1
-    end
+    --[[TODO: Проверка эта нужна, 
+        но хз как она повлияет на код, по идее если чанк не загружен, то он его загрузит
+        Но это нуждается в проверке
+    ]]
+    if old_id == -1 then return end
 
     if pid ~= -1 then
         if old_id ~= 0 and new_id == 0 then
-            block.destruct(packet.x, packet.y, packet.z, packet.pid)
+            block.destruct(packet.x, packet.y, packet.z, pid)
+            return
         elseif old_id == 0 and new_id ~= 0 then
-            block.place(packet.x, packet.y, packet.z, new_id, new_states, packet.pid)
-        elseif old_id == new_id and old_states ~= new_states then
-
+            block.place(packet.x, packet.y, packet.z, new_id, packet.block_state, pid)
+            return
         end
     end
 

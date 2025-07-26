@@ -72,4 +72,35 @@ ServerPipe:add_middleware(function(server)
     return server
 end)
 
+--Отправляем чексуммы
+local last_upd = time.uptime()
+ServerPipe:add_middleware(function(server)
+    if time.uptime() - last_upd < 2 then
+        return server
+    end
+
+    last_upd = time.uptime()
+
+    local players = {}
+    local checksums = {}
+    local client_x, client_y, client_z = player.get_pos(hud.get_player())
+
+    local render_distance = CHUNK_LOADING_DISTANCE*16
+
+    for pid, _ in pairs(PLAYER_LIST) do
+        local x, y, z = player.get_pos(pid)
+
+        if math.euclidian3D(client_x, client_y, client_z, x, y, z) < render_distance then
+            table.insert(players, pid)
+            table.insert(checksums, vec3.checksum(math.round(x), math.round(y), math.round(z)))
+        end
+    end
+
+    if #players == 0 then return server end
+
+    server:push_packet(protocol.ClientMsg.PlayerPositionChecksum, players, checksums)
+
+    return server
+end)
+
 return ServerPipe

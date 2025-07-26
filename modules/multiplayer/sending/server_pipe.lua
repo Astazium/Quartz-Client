@@ -75,7 +75,7 @@ end)
 --Отправляем чексуммы
 local last_upd = time.uptime()
 ServerPipe:add_middleware(function(server)
-    if time.uptime() - last_upd < 2 then
+    if time.uptime() - last_upd < 30 then
         return server
     end
 
@@ -92,7 +92,7 @@ ServerPipe:add_middleware(function(server)
 
         if math.euclidian3D(client_x, client_y, client_z, x, y, z) < render_distance then
             table.insert(players, pid)
-            table.insert(checksums, vec3.checksum(math.round(x), math.round(y), math.round(z)))
+            table.insert(checksums, vec3.checksum(math.round(x, 1), math.round(y, 1), math.round(z, 1)))
         end
     end
 

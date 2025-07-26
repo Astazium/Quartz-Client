@@ -23,8 +23,10 @@ player.set_pos = function (pid, x, y, z, no_interpolated)
     local entity = entities.get(player.get_entity(pid))
 
     if entity then
+        player.set_noclip(pid, true)
+        player.set_flight(pid, true)
+
         entity.rigidbody:set_enabled(true)
-        entity.rigidbody:set_body_type("kinematic")
         local transform, rigidbody = entity.transform, entity.rigidbody
         rigidbody:set_vel({0, 0, 0})
         local current_pos = transform:get_pos()

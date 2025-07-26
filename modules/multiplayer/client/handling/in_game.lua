@@ -39,7 +39,7 @@ handlers[protocol.ServerMsg.ChunksData] = function (server, packet)
 end
 
 handlers[protocol.ServerMsg.BlockChanged] = function (server, packet)
-	local new_id = packet.block_id
+    local new_id = packet.block_id
     local new_states = packet.block_state
 
     local old_id = block.get(packet.x, packet.y, packet.z)
@@ -54,7 +54,7 @@ handlers[protocol.ServerMsg.BlockChanged] = function (server, packet)
         pid = -1
     end
 
-	if old_id ~= 0 and new_id == 0 then
+    if old_id ~= 0 and new_id == 0 then
         if pid ~= -1 then
             block.destruct(packet.x, packet.y, packet.z, packet.pid)
         end

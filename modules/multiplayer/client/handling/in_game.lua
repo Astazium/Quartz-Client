@@ -54,16 +54,14 @@ handlers[protocol.ServerMsg.BlockChanged] = function (server, packet)
         pid = -1
     end
 
-    if old_id ~= 0 and new_id == 0 then
-        if pid ~= -1 then
+    if pid ~= -1 then
+        if old_id ~= 0 and new_id == 0 then
             block.destruct(packet.x, packet.y, packet.z, packet.pid)
-        end
-    elseif old_id == 0 and new_id ~= 0 then
-        if pid ~= -1 then
+        elseif old_id == 0 and new_id ~= 0 then
             block.place(packet.x, packet.y, packet.z, new_id, new_states, packet.pid)
-        end
-    elseif old_id == new_id and old_states ~= new_states then
+        elseif old_id == new_id and old_states ~= new_states then
 
+        end
     end
 
     block.set(packet.x, packet.y, packet.z, packet.block_id, packet.block_state, pid)

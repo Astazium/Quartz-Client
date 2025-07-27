@@ -23,8 +23,10 @@ player.set_pos = function (pid, x, y, z, no_interpolated)
     local entity = entities.get(player.get_entity(pid))
 
     if entity then
-        player.set_noclip(pid, true)
-        player.set_flight(pid, true)
+        if pid ~= hud.get_player() then
+            player.set_noclip(pid, true)
+            player.set_flight(pid, true)
+        end
 
         entity.rigidbody:set_enabled(true)
         local transform, rigidbody = entity.transform, entity.rigidbody

@@ -51,7 +51,7 @@ handlers[protocol.ServerMsg.BlockChanged] = function (server, packet)
     ]]
     if old_id == -1 then return end
 
-    if pid ~= -1 then
+    if pid ~= -1 and pid ~= CLIENT_PLAYER.pid then
         if old_id ~= 0 and new_id == 0 then
             block.destruct(packet.x, packet.y, packet.z, pid)
         elseif old_id == 0 and new_id ~= 0 then

@@ -75,7 +75,7 @@ end)
 --Отправляем чексуммы
 local last_upd = time.uptime()
 ServerPipe:add_middleware(function(server)
-    if time.uptime() - last_upd < 30 or true then
+    if time.uptime() - last_upd < 5 then
         return server
     end
 

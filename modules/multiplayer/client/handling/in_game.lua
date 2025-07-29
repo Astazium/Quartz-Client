@@ -148,6 +148,7 @@ handlers[protocol.ServerMsg.PlayerMoved] = function (server, packet)
         player:set_pos(data.pos)
     end
 
+    player:set_hand_item(data.hand_item)
     player:set_rot(data.rot)
     player:set_cheats(data.cheats)
 end

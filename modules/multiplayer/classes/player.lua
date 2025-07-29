@@ -15,6 +15,7 @@ function Player.new(pid, name, pos, rot, cheats)
     self.rot = rot or {yaw = 0, pitch = 0}
     self.cheats = cheats or {noclip = false, flight = false}
     self.active = true
+    self.hand_item = 0
     self.ping = {
         ping = -1,
         last_upd = 0
@@ -89,6 +90,12 @@ function Player:set_slot(slot_id, set_flag)
     player.set_selected_slot(self.pid, slot_id)
 
     if set_flag then self.changed_flags.slot = true end
+end
+
+function Player:set_hand_item(hand_item)
+    local invid, slot = player.get_inventory(self.pid)
+
+    inventory.set(invid, slot, hand_item, 1)
 end
 
 function Player:__check_pos()

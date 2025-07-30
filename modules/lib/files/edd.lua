@@ -295,7 +295,6 @@ function module.decode(buf)
     dirty.textures = __get_textures(buf, has_textures)
     dirty.models = __get_models(buf, has_models)
     dirty.components = __get_components(buf, has_components)
-    print(json.tostring(dirty))
     return dirty
 end
 

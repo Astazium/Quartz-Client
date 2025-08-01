@@ -12,7 +12,7 @@ function module.blocks.sync_inventory(pos)
 end
 
 function module.blocks.sync_slot(pos, slot)
-    SERVER:push_packet(protocol.ServerMsg.BlockInventorySlot, pos.x, pos.y, pos.z, slot.slot_id, slot.item_id, slot.item_count)
+    SERVER:push_packet(protocol.ClientMsg.BlockInventorySlot, pos.x, pos.y, pos.z, slot.slot_id, slot.item_id, slot.item_count)
 end
 
 return module

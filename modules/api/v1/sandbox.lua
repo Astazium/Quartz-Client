@@ -1,3 +1,5 @@
+local protocol = start_require "multiplayer/protocol-kernel/protocol"
+
 local module = {
     blocks = {}
 }

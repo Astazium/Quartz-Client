@@ -4,7 +4,7 @@ local env = start_require "api/v1/env"
 local sandbox = require "api/v1/sandbox"
 local rpc = require "api/v1/rpc"
 local bson = require "lib/files/bson"
-local inv_dat = require "lib/files/inv_dat"
+local inv_dat = require "api/v1/inv_dat"
 
 local api = {
     events = events,

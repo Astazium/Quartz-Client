@@ -8,3 +8,4 @@ menu.Apply=Apply
 Connecting=Connecting...
 menu.Unexpect_Disconnected=Server unexpectedly shut down, client disconnected
 quartz.player_list=Player list
+quartz.cancel=Cancel

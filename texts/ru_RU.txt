@@ -7,3 +7,4 @@ Server_name=Название сервера
 Connecting=Подключение...
 menu.Unexpect_Disconnected=Сервер внезапно отключился, соединение с сервером потеряно
 quartz.player_list=Список игроков
+quartz.cancel=Отмена

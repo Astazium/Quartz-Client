@@ -1,4 +1,3 @@
-
 local bit_buffer = require "lib/files/bit_buffer"
 local compiler = require "multiplayer/protocol-kernel/compiler"
 local protocol = {}

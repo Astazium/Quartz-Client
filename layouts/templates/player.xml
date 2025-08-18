@@ -1,11 +1,11 @@
-<container id="player_data_%{id}" size="400,80" color="#7f7f7f3e">
+<container id="player_data_%{id}" size="400,40" color="#7f7f7f3e">
 
     <image id="player_icon_%{id}" src='%{player_icon}'
-        size='64'
-        pos='8,8'/>
+        size='32'
+        pos='4,4'/>
 
-    <label id="player_name_%{id}" pos="78,8">%{player_name}</label>
-    <label id="player_pid_%{id}" color="#316b8dff" pos="78,24">%{player_pid}</label>
+    <label id="player_name_%{id}" pos="38,4">%{player_name}</label>
+    <label id="player_pid_%{id}" color="#316b8dff" pos="38,24">%{player_pid}</label>
     <button margin='4,4,14,4'
             gravity='center-right'
             color='#00000000'

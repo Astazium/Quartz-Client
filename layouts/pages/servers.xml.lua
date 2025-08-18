@@ -1,4 +1,6 @@
 local protocol = require "multiplayer/protocol-kernel/protocol"
+local server_list = document.server_list
+local servers_infos = {}
 local handlers = {}
 
 function place_server(panel, server_info, callback)
@@ -6,12 +8,27 @@ function place_server(panel, server_info, callback)
     panel:add(gui.template("server", server_info))
 end
 
-local server_list = document.server_list
-local servers_infos = {}
-
 function on_open()
     for id, server in ipairs(CONFIG.Servers) do
 
+        place_server(server_list, {
+            id = id,
+            server_favicon = "gui/not_connected",
+            server_name = server.name,
+            server_desc = '',
+            server_status = COLORS.gray .. "pending...",
+            players_online = ""
+        })
+
+        CLIENT:connect(server.address, server.port, server.name, nil, id, {
+            on_change_info = handlers.on_change_info
+        })
+    end
+end
+
+function refresh()
+    server_list:clear()
+    for id, server in ipairs(CONFIG.Servers) do
         place_server(server_list, {
             id = id,
             server_favicon = "gui/not_connected",

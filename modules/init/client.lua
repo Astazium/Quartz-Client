@@ -25,6 +25,7 @@ external_app.reset_content()
 for _, pack in ipairs(pack.get_available()) do
     if table.has(CONFIG.Pinned_packs, pack) then
         external_app.reconfig_packs({pack}, {})
+        table.insert(CONTENT_PACKS, pack)
     end
 end
 

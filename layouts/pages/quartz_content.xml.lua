@@ -223,8 +223,6 @@ function refresh()
     packs_all = {unpack(packs_installed)}
     required = {}
 
-    print(table.tostring(pack.get_installed()))
-
     for _, pack in ipairs({PACK_ID}) do
         if not table.has(base_packs, pack) then
             table.insert(base_packs, pack)

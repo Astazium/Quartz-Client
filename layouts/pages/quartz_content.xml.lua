@@ -143,6 +143,22 @@ function move_pack(id)
     refresh_changes()
 end
 
+function pin(id)
+    if not table.has(packs_included, id) then
+        move_pack(id)
+    end
+
+    if table.has(CONFIG.Pinned_packs, id) then
+        table.remove_value(CONFIG.Pinned_packs, id)
+        document["pin_" .. id].color = {138, 127, 142, 255}
+    else
+        table.insert(CONFIG.Pinned_packs, id)
+        document["pin_" .. id].color = {255, 255, 255, 255}
+    end
+
+    file.write(CONFIG_PATH, json.tostring(CONFIG))
+end
+
 function place_pack(panel, packinfo, callback, position_func)
     if packinfo.error then
         callback = nil
@@ -154,9 +170,14 @@ function place_pack(panel, packinfo, callback, position_func)
     end
     packinfo.callback = callback
     packinfo.position_func = position_func or function () end
-    panel:add(gui.template("pack", packinfo))
+
+    panel:add(gui.template("quartz_pack", packinfo))
     if not callback or packinfo.has_indices then
         document["pack_"..packinfo.id].enabled = false
+    end
+
+    if not table.has(CONFIG.Pinned_packs, packinfo.id) then
+        document["pin_" .. packinfo.id].color = {138, 127, 142, 255}
     end
 end
 
@@ -201,6 +222,8 @@ function refresh()
     base_packs = pack.get_base_packs()
     packs_all = {unpack(packs_installed)}
     required = {}
+
+    print(table.tostring(pack.get_installed()))
 
     for _, pack in ipairs({PACK_ID}) do
         if not table.has(base_packs, pack) then
@@ -251,7 +274,7 @@ function refresh()
     for i,id in ipairs(packs_installed) do
         local packinfo = packinfos[id]
         packinfo.index = i
-        callback = not table.has(base_packs, id) and string.format('move_pack("%s")', id) or nil
+        local callback = not table.has(base_packs, id) and string.format('move_pack("%s")', id) or nil
         packinfo.error = check_dependencies(packinfo)
         place_pack(packs_cur, packinfo, callback, string.format('reposition_func("%s")', packinfo.id))
     end
@@ -259,7 +282,7 @@ function refresh()
     for i,id in ipairs(packs_available) do
         local packinfo = packinfos[id]
         packinfo.index = i
-        callback = string.format('move_pack("%s")', id)
+        local callback = string.format('move_pack("%s")', id)
         packinfo.error = check_dependencies(packinfo)
         place_pack(packs_add, packinfo, callback, string.format('reposition_func("%s")', packinfo.id))
     end

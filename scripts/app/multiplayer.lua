@@ -20,6 +20,18 @@ _G["leave_to_menu"] = function (reason)
     menu.page = "menu"
 end
 
+local protect_app = {}
+
+for key, val in pairs(app) do
+    protect_app[key] = function (...)
+        if parse_path(debug.getinfo(2).source) == PACK_ID then
+            return val(...)
+        end
+    end
+end
+
+_G["external_app"] = protect_app
+
 -- _G["leave_to_menu"] = function (reason)
 --     if world.is_open() then
 --         app.close_world(false)
@@ -46,17 +58,6 @@ local client = Client.new()
 
 menu.page = "servers"
 
-local protect_app = {}
-
-for key, val in pairs(app) do
-    protect_app[key] = function (...)
-        if parse_path(debug.getinfo(2).source) == PACK_ID then
-            return val(...)
-        end
-    end
-end
-
-_G["external_app"] = protect_app
 _G["/$p"] = table.copy(package.loaded)
 
 local function main()

@@ -1,11 +1,11 @@
 {
     "textures": [
         "gui/line",
-        "gui/rat",
         "gui/not_connected",
         "gui/friend",
         "gui/invite_friend",
         "gui/delete_friend",
-        "gui/sad"
+        "gui/sad",
+        "gui/pin"
     ]
 }

@@ -31,3 +31,12 @@ end
 
 external_app.reconfig_packs({"quartz"}, {})
 external_app.load_content()
+
+-- Инициализация скриптов
+local paths = file.list_all_res("scripts/quartz/")
+
+for _, path in ipairs(paths) do
+    if file.name(path) == "main.lua" then
+        __load_script(path)
+    end
+end

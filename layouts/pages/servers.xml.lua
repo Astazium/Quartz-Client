@@ -109,6 +109,7 @@ function connect(id)
 
     CLIENT:connect(server.address, server.port, server.name, protocol.States.Login, id, {
         on_connect = function (_server)
+            events.emit("quartz:server_connect", _server)
             _server.meta.max_online = info.max
             local buffer = protocol.create_databuffer()
 

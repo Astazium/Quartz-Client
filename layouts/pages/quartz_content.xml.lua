@@ -47,6 +47,7 @@ function apply()
     core.load_content()
 
     CONTENT_PACKS = table.unique(table.merge(CONTENT_PACKS, add_packs))
+    initializator.init_pack_scripts()
     if mode ~= "world" then
         menu:back()
     end

@@ -3,17 +3,20 @@ local socketlib = {}
 
 -- Подключение к TCP-серверу
 function socketlib.connect(address, port, on_connect, on_error)
-    local socket = network.tcp_connect(address, port, function(s)
+    local status, socket = pcall(network.tcp_connect, address, port, function(s)
         if s:is_connected() then
             if on_connect then
                 on_connect(s)
             end
-        else
-            if on_error then
-                on_error(s)
-            end
         end
     end)
+
+    if not status then
+        if on_error then
+            on_error()
+        end
+        return
+    end
 
     return socket
 end

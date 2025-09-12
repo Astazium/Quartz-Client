@@ -64,6 +64,7 @@ ClientPipe:add_middleware(function(server)
         if not success then
             logger.log("Error while reading packet: " .. err, 'E')
             logger.log("Packet type: " .. packet.packet_type, 'E')
+            print(debug.traceback())
         end
     end
 

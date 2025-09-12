@@ -24,6 +24,8 @@ function on_open()
             on_change_info = handlers.on_change_info
         })
     end
+
+    events.emit("quartz:server_list_opened", document)
 end
 
 function refresh()
@@ -123,6 +125,11 @@ function connect(id)
     })
 
     menu.page = "quartz_connection"
+end
+
+function to_config()
+    menu.page="quartz_config"
+    events.emit("quartz:config_opened", document)
 end
 
 function main_menu()

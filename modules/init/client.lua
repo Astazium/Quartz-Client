@@ -22,17 +22,23 @@ end
 
 CONFIG = table.merge(json.parse(file.read(CONFIG_PATH)), default_config)
 
--- Инициализация пинов
-external_app.reset_content()
-for _, pack in ipairs(pack.get_available()) do
-    if table.has(CONFIG.Pinned_packs, pack) then
-        external_app.reconfig_packs({pack}, {})
-        table.insert(CONTENT_PACKS, pack)
+-- Инициализацация паков
+function initializator.init_packs()
+    for i=#CONTENT_PACKS, 1, -1 do
+        table.remove(CONTENT_PACKS, i)
     end
-end
 
-external_app.reconfig_packs({"quartz"}, {})
-external_app.load_content()
+    external_app.reset_content()
+    for _, pack in ipairs(pack.get_available()) do
+        if table.has(CONFIG.Pinned_packs, pack) then
+            external_app.reconfig_packs({pack}, {})
+            table.insert(CONTENT_PACKS, pack)
+        end
+    end
+
+    external_app.reconfig_packs({"quartz"}, {})
+    external_app.load_content()
+end
 
 -- Инициализация скриптов
 function initializator.init_pack_scripts()
@@ -45,4 +51,5 @@ function initializator.init_pack_scripts()
     end
 end
 
+initializator.init_packs()
 initializator.init_pack_scripts()

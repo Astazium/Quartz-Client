@@ -44,8 +44,8 @@ function module.stop(pid)
 end
 
 function module.set_origin(particle)
-    if not PARTICLES_PID[pid] then
-        local ticker = utils.get_tick(tostring(pid) .. "particle")
+    if not PARTICLES_PID[particle.pid] then
+        local ticker = utils.get_tick(tostring(particle.pid) .. "particle")
         ticker[2][1].origin = particle.origin
         return
     end

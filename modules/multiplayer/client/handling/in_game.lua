@@ -13,6 +13,7 @@ local handlers = {}
 
 handlers[protocol.ServerMsg.Disconnect] = function (server, packet)
     leave_to_menu(packet.reason)
+    CLIENT_PLAYER:set_slot(packet.slot, false)
     CLIENT:disconnect()
 end
 
@@ -167,10 +168,6 @@ end
 handlers[protocol.ServerMsg.PlayerHandSlot] = function (server, packet)
     player.set_selected_slot(hud.get_player(), packet.slot)
     CACHED_DATA.slot = packet.slot
-end
-
-handlers[protocol.ServerMsg.Disconnect] = function (server, packet)
-    CLIENT_PLAYER:set_slot(packet.slot, false)
 end
 
 handlers[ protocol.ServerMsg.PackEvent ] = function (server, packet)

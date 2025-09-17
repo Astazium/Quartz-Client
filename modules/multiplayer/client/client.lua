@@ -85,7 +85,9 @@ function Client:tick()
 
             local global_server = SERVER or {}
             if server.id == global_server.id then
-                leave_to_menu()
+                if world.is_open() then
+                    leave_to_menu()
+                end
             end
 
             if socket and socket:is_alive() then

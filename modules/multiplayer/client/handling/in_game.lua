@@ -17,13 +17,22 @@ handlers[protocol.ServerMsg.Disconnect] = function (server, packet)
     CLIENT:disconnect()
 end
 
+local function set_player_spawn_pos()
+    CLIENT_PLAYER:set_pos(CACHED_DATA.pos, false)
+    CLIENT_PLAYER:set_rot(CACHED_DATA.rot, false)
+    CLIENT_PLAYER:set_cheats(CACHED_DATA.cheats, false)
+    CLIENT_PLAYER:set_inventory(CACHED_DATA.inv, false)
+    CLIENT_PLAYER:set_slot(CACHED_DATA.slot, false)
+end
+
 handlers[protocol.ServerMsg.ChunkData] = function (server, packet)
     world.set_chunk_data(packet.x, packet.z, packet.data)
     local pos = CACHED_DATA.pos
-    if not pos then return end
+    if not CACHED_DATA.over and pos then return end
 
-    if math.floor(pos.x) == packet.x and math.floor(pos.z / 16) == packet.z then
+    if math.floor(pos.x / 16) == packet.x and math.floor(pos.z / 16) == packet.z then
         CACHED_DATA.over = true
+        set_player_spawn_pos()
     end
 end
 
@@ -31,9 +40,10 @@ handlers[protocol.ServerMsg.ChunksData] = function (server, packet)
     for _, chunk in ipairs(packet.list) do
         world.set_chunk_data(chunk[1], chunk[2], chunk[3])
         local pos = CACHED_DATA.pos
-        if pos then
+        if pos and not CACHED_DATA.over then
             if math.floor(pos.x / 16) == chunk[1] and math.floor(pos.z / 16) == chunk[2] then
                 CACHED_DATA.over = true
+                set_player_spawn_pos()
             end
         end
     end
@@ -74,7 +84,6 @@ handlers[protocol.ServerMsg.ChatMessage] = function (server, packet)
     console.chat("| "..packet.message)
 end
 
-
 handlers[protocol.ServerMsg.SynchronizePlayerPosition] = function (server, packet)
     local player_data = packet.data
 
@@ -82,9 +91,11 @@ handlers[protocol.ServerMsg.SynchronizePlayerPosition] = function (server, packe
     CLIENT_PLAYER:set_rot(player_data.rot, false)
     CLIENT_PLAYER:set_cheats(player_data.cheats, false)
 
-    CACHED_DATA.pos = player_data.pos
-    CACHED_DATA.rot = player_data.rot
-    CACHED_DATA.cheats = player_data.cheats
+    if not CACHED_DATA.over then
+        CACHED_DATA.pos = player_data.pos
+        CACHED_DATA.rot = player_data.rot
+        CACHED_DATA.cheats = player_data.cheats
+    end
 end
 
 handlers[protocol.ServerMsg.PlayerList] = function (server, packet)

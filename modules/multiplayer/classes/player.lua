@@ -48,6 +48,7 @@ function Player:set_pos(pos, set_flag)
 
     self.pos = {x = pos.x, y = pos.y, z = pos.z}
     player.set_pos(self.pid, pos.x, pos.y, pos.z, interpolated)
+    player.set_spawnpoint(self.pid, pos.x, math.abs(pos.y), pos.z)
 
     self.region = {
         x = math.floor(pos.x / 32),
@@ -68,6 +69,14 @@ end
 
 function Player:set_cheats(cheats, set_flag)
     if cheats == nil then return end
+
+    if CLIENT_PLAYER.pid ~= self.pid then
+        if self.cheats.noclip == false then
+            self.cheats = {noclip = true, flight = true}
+            player.set_flight(self.pid, true)
+            player.set_noclip(self.pid, true)
+        end
+    end
 
     self.cheats = {noclip = cheats.noclip, flight = cheats.flight}
     player.set_flight(self.pid, cheats.flight)
@@ -93,12 +102,17 @@ function Player:set_slot(slot_id, set_flag)
 end
 
 function Player:set_hand_item(hand_item)
+    if not hand_item then return end
     local invid, slot = player.get_inventory(self.pid)
 
     inventory.set(invid, slot, hand_item, 1)
 end
 
 function Player:__check_pos()
+    if not CACHED_DATA.over then
+        return
+    end
+
     local x, y, z = player.get_pos(self.pid)
     if math.euclidian3D(self.pos.x, self.pos.y, self.pos.z, x, y, z) > 0.05 then
         self.pos = {x = x, y = y, z = z}

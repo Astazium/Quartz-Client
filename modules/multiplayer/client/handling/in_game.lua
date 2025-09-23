@@ -68,9 +68,8 @@ handlers[protocol.ServerMsg.BlockChanged] = function (server, packet)
         elseif old_id == 0 and new_id ~= 0 then
             block.place(packet.x, packet.y, packet.z, new_id, packet.block_state, pid)
         end
-    else
-        block.set(packet.x, packet.y, packet.z, packet.block_id, packet.block_state, pid)
     end
+    block.set(packet.x, packet.y, packet.z, packet.block_id, packet.block_state, pid)
 end
 
 handlers[protocol.ServerMsg.TimeUpdate] = function (server, packet)

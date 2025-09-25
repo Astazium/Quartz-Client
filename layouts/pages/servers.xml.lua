@@ -103,6 +103,57 @@ function remove_server(id)
     document["serverdata_" .. id]:destruct()
 end
 
+local edited_server = nil
+function start_edit(id)
+    if edited_server then
+        return
+    end
+
+    id = tonumber(id)
+
+    local info = CONFIG.Servers[id]
+    edited_server = id
+    document.root:add(gui.template("server_edit", {
+        name = info.name,
+        ip = string.format("%s:%s", info.address, info.port)
+    }))
+end
+
+function edit_server(data)
+    local server_ip = data.ip
+    local server_name = data.name
+
+    if server_name then
+        CONFIG.Servers[edited_server].name = server_name
+    end
+
+    if server_ip then
+        local address, port = unpack(string.split(server_ip, ':'))
+
+        if not address or not port then
+            return
+        end
+
+        CONFIG.Servers[edited_server].address = address
+        CONFIG.Servers[edited_server].port = port
+    end
+end
+
+function finish_edit()
+    file.write(CONFIG_PATH, json.tostring(CONFIG))
+    edited_server = nil
+    refresh()
+    document.server_edit:destruct()
+end
+
+function edit_server_name(text)
+    edit_server({name = text})
+end
+
+function edit_server_ip(text)
+    edit_server({ip = text})
+end
+
 function connect(id)
     local info = servers_infos[id]
     if not info then return end

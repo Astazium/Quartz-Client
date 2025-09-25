@@ -4,6 +4,13 @@
         size='64'
         pos='8,8'/>
 
+    <button gravity='bottom-left' 
+            margin="80,0,0,0"
+            color="#00000000"
+            onclick='start_edit("%{id}")'>
+        <image id='edit_%{id}' src='gui/settings_icon' size="24,24"/>
+    </button>
+
     <label id="servername_%{id}" markup='md' pos="78,8">%{server_name}</label>
     <label id="serverdesc_%{id}" markup='md' pos="78,24">%{server_desc}</label>
 

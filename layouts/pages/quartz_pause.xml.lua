@@ -36,10 +36,10 @@ function on_open()
     document.online.text = string.format("Online: %s/%s", players_online+1, SERVER.meta.max_online)
 
     if not PLAYER_LIST or players_online == 0 then
-        document.cross.visible = true
+        document.sad.visible = true
         return
     else
-        document.cross.visible = false
+        document.sad.visible = false
     end
 
     for _, player in pairs(PLAYER_LIST) do
@@ -64,4 +64,6 @@ function on_open()
 
         next_id = next_id + 1
     end
+
+    events.emit("quartz:server_list_opened", document)
 end

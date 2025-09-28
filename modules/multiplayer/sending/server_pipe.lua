@@ -83,7 +83,7 @@ ServerPipe:add_middleware(function(server)
 
     local players = {}
     local checksums = {}
-    local client_x, client_y, client_z = player.get_pos(hud.get_player())
+    local client_x, client_y, client_z = player.get_pos(CLIENT_PLAYER.pid)
 
     local render_distance = CHUNK_LOADING_DISTANCE*16
 

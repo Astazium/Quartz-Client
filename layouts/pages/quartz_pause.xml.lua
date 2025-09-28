@@ -8,7 +8,7 @@ end
 
 function player(id)
     local name = document["player_name_" .. id].text
-    local is_friend = document["player_icon_" .. id].src == "gui/friend"
+    local is_friend = table.has(CONFIG.Account.friends, id)
 
     if is_friend then
         document["player_icon_" .. id].src = "gui/entity"

@@ -1,5 +1,3 @@
-local next_id = 0
-
 function place_player(info)
     document.player_list:add(gui.template("player", info))
 end
@@ -55,15 +53,13 @@ function on_open()
         end
 
         place_player({
-            id = next_id,
+            id = player.name,
             player_icon = icon,
             player_pid = "pid: " .. player.pid,
             player_name = player.name,
             player_action = action
         })
-
-        next_id = next_id + 1
     end
 
-    events.emit("quartz:server_list_opened", document)
+    events.emit("quartz:pause_opened", document)
 end

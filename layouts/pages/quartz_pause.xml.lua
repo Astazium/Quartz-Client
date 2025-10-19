@@ -23,7 +23,7 @@ function player(id)
     file.write(CONFIG_PATH, json.tostring(CONFIG))
 end
 
-function on_open()
+local function update()
     local players_online = table.count_pairs(PLAYER_LIST or {})
 
     local friends = table.copy(CONFIG.Account.friends)
@@ -60,6 +60,16 @@ function on_open()
             player_action = action
         })
     end
+end
+
+function on_open()
+    update()
+    local main_container = document.player_list.parent
 
     events.emit("quartz:pause_opened", document)
+
+    main_container:setInterval(100, function ()
+        document.player_list:clear()
+        update()
+    end)
 end

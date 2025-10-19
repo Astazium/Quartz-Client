@@ -29,7 +29,7 @@ local function update()
     local friends = table.copy(CONFIG.Account.friends)
     local wait_time = math.max(time.uptime() - CLIENT_PLAYER.ping.last_upd - 5, 0)
 
-    document.pid.text = "Pid: " .. CLIENT_PLAYER.pid
+    document.pid.text = "PID: " .. CLIENT_PLAYER.pid
     document.ping.text = "Ping: " .. math.round(wait_time*1000) .. "ms"
     document.online.text = string.format("Online: %s/%s", players_online+1, SERVER.meta.max_online)
 

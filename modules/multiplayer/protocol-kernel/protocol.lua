@@ -147,17 +147,14 @@ for index, value in ipairs(protocol.data.server) do
     protocol.ServerMsg[value[1]] = index
 
     create_parser("server", index, table.sub(value, 2))
-    logger.log(string.format('%s. Packet "%s" compiled', index, value[1]))
 end
 -- Парсим из json типы пакетов клиента
-logger.blank()
 logger.log("Compiling client packets")
 for index, value in ipairs(protocol.data.client) do
     protocol.ClientMsg[index] = value[1] -- Имя типа пакета по индексу
     protocol.ClientMsg[value[1]] = index -- Индекс по имени типа пакета
 
     create_parser("client", index, table.sub(value, 2))
-    logger.log(string.format('%s. Packet "%s" compiled', index, value[1]))
 end
 -- Парсим из json статусы
 for index, value in ipairs(protocol.data.states) do

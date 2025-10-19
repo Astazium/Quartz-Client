@@ -1,5 +1,3 @@
-local next_id = 0
-
 function place_player(info)
     document.player_list:add(gui.template("player", info))
 end
@@ -10,7 +8,7 @@ end
 
 function player(id)
     local name = document["player_name_" .. id].text
-    local is_friend = document["player_icon_" .. id].src == "gui/friend"
+    local is_friend = table.has(CONFIG.Account.friends, id)
 
     if is_friend then
         document["player_icon_" .. id].src = "gui/entity"
@@ -36,10 +34,10 @@ function on_open()
     document.online.text = string.format("Online: %s/%s", players_online+1, SERVER.meta.max_online)
 
     if not PLAYER_LIST or players_online == 0 then
-        document.cross.visible = true
+        document.sad.visible = true
         return
     else
-        document.cross.visible = false
+        document.sad.visible = false
     end
 
     for _, player in pairs(PLAYER_LIST) do
@@ -55,13 +53,13 @@ function on_open()
         end
 
         place_player({
-            id = next_id,
+            id = player.name,
             player_icon = icon,
             player_pid = "pid: " .. player.pid,
             player_name = player.name,
             player_action = action
         })
-
-        next_id = next_id + 1
     end
+
+    events.emit("quartz:pause_opened", document)
 end

@@ -70,7 +70,7 @@ function on_open()
 
     events.emit("quartz:pause_opened", document)
 
-    main_container:setInterval(100, function ()
+    main_container:setInterval(700, function ()
         document.player_list:clear()
         update()
     end)

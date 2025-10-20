@@ -6,7 +6,7 @@ function leave()
     CLIENT:disconnect()
 end
 
--- Тута надо функцию переименовать, но я не пока не придумал
+-- Тута надо функцию переименовать, но я пока не придумал
 function player(id)
     local name = document["player_name_" .. id].text
     local is_friend = table.has(CONFIG.Account.friends, id)
@@ -28,6 +28,7 @@ function update()
     local players_online = table.count_pairs(PLAYER_LIST or {})
 
     local friends = table.copy(CONFIG.Account.friends)
+    -- TODO: Исправить пинг
     local wait_time = math.max(time.uptime() - CLIENT_PLAYER.ping.last_upd - 5, 0)
 
     document.pid.text = "PID: " .. CLIENT_PLAYER.pid

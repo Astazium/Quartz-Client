@@ -6,6 +6,7 @@ function leave()
     CLIENT:disconnect()
 end
 
+-- Тута надо функцию переименовать, но я не пока не придумал
 function player(id)
     local name = document["player_name_" .. id].text
     local is_friend = table.has(CONFIG.Account.friends, id)
@@ -23,7 +24,7 @@ function player(id)
     file.write(CONFIG_PATH, json.tostring(CONFIG))
 end
 
-local function update()
+function update()
     local players_online = table.count_pairs(PLAYER_LIST or {})
 
     local friends = table.copy(CONFIG.Account.friends)
@@ -55,7 +56,7 @@ local function update()
         place_player({
             id = player.name,
             player_icon = icon,
-            player_pid = "pid: " .. player.pid,
+            player_pid = "PID: " .. player.pid,
             player_name = player.name,
             player_action = action
         })

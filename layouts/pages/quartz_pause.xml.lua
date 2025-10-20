@@ -24,6 +24,8 @@ function player(id)
     file.write(CONFIG_PATH, json.tostring(CONFIG))
 end
 
+local custom_icons = {}
+
 function update()
     local players_online = table.count_pairs(PLAYER_LIST or {})
 
@@ -54,6 +56,10 @@ function update()
             action = "gui/invite_friend"
         end
 
+        if custom_icons[player.name] then
+            icon = custom_icons[player.name]
+        end
+
         place_player({
             id = player.name,
             player_icon = icon,
@@ -71,7 +77,16 @@ function on_open()
     events.emit("quartz:pause_opened", document)
 
     main_container:setInterval(700, function ()
+        for _, player in pairs(PLAYER_LIST) do
+            if  custom_icons[player.name] and
+                custom_icons[player.name] ~= "gui/friend" and
+                custom_icons[player.name] ~= "gui/entity"
+            then
+                custom_icons[player.name] = document["player_icon_" .. player.name].src
+            end
+        end
         document.player_list:clear()
         update()
+        custom_icons = {}
     end)
 end

@@ -11,6 +11,13 @@ function player(id)
     local name = document["player_name_" .. id].text
     local is_friend = table.has(CONFIG.Account.friends, id)
 
+    local custom_icon = nil
+    if  document["player_icon_" .. id].src ~= "gui/friend" and
+        document["player_icon_" .. id].src ~= "gui/entity"
+    then
+        custom_icon = document["player_icon_" .. id].src
+    end
+
     if is_friend then
         document["player_icon_" .. id].src = "gui/entity"
         document["player_action_" .. id].src = "gui/invite_friend"
@@ -19,6 +26,10 @@ function player(id)
         document["player_icon_" .. id].src = "gui/friend"
         document["player_action_" .. id].src = "gui/delete_friend"
         table.insert(CONFIG.Account.friends, name)
+    end
+
+    if custom_icon then
+        document["player_icon_" .. id].src = custom_icon
     end
 
     file.write(CONFIG_PATH, json.tostring(CONFIG))
@@ -78,9 +89,9 @@ function on_open()
 
     main_container:setInterval(700, function ()
         for _, player in pairs(PLAYER_LIST) do
-            if  custom_icons[player.name] and
-                custom_icons[player.name] ~= "gui/friend" and
-                custom_icons[player.name] ~= "gui/entity"
+            if  document["player_icon_" .. player.name] and
+                document["player_icon_" .. player.name].src ~= "gui/friend" and
+                document["player_icon_" .. player.name].src ~= "gui/entity"
             then
                 custom_icons[player.name] = document["player_icon_" .. player.name].src
             end

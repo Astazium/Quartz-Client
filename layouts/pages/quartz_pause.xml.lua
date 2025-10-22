@@ -89,10 +89,11 @@ function on_open()
 
     main_container:setInterval(700, function ()
         for _, player in pairs(PLAYER_LIST) do
-            if  document["player_icon_" .. player.name] and
-                document["player_icon_" .. player.name].src ~= "gui/friend" and
-                document["player_icon_" .. player.name].src ~= "gui/entity"
-            then
+            local ok, icon = pcall(function ()
+                return document["player_icon_" .. player.name].src
+            end)
+
+            if ok and icon and icon ~= "gui/friend" and icon ~= "gui/entity" then
                 custom_icons[player.name] = document["player_icon_" .. player.name].src
             end
         end

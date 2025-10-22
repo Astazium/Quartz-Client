@@ -94,7 +94,7 @@ function on_open()
             end)
 
             if ok and icon and icon ~= "gui/friend" and icon ~= "gui/entity" then
-                custom_icons[player.name] = document["player_icon_" .. player.name].src
+                custom_icons[player.name] = icon
             end
         end
         document.player_list:clear()

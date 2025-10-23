@@ -67,7 +67,7 @@ function Player:set_rot(rot, set_flag)
     -- вроде работает
     local entity = entities.get(player.get_entity(self.pid))
     if entity then
-        local mob = ent:require_component("core:mob")
+        local mob = entity:require_component("core:mob")
         local yaw, pitch = math.rad(rot.yaw), math.rad(rot.pitch)
 
         local head_dir = {
@@ -75,7 +75,7 @@ function Player:set_rot(rot, set_flag)
             math.sin(pitch),
             math.sin(yaw) * math.cos(pitch)
         }
-        mob.look_at(vec3.add(ent.transform:get_pos(), head_dir))
+        mob.look_at(vec3.add(entity.transform:get_pos(), head_dir))
     end
 
     if set_flag then self.changed_flags.rot = true end

@@ -55,6 +55,14 @@ require "quartz:std/stdboot"
 require "quartz:init/client"
 local Client = require "quartz:multiplayer/client/client"
 
+local major, minor = app.get_version()
+if (major > 0) or (major == 0 and minor >= 29) then
+    local env = __vc__pack_envs["quartz"]
+    for k, v in pairs(env) do
+        _G[k] = v
+    end
+end
+
 table.insert(CONTENT_PACKS, "quartz")
 
 local client = Client.new()
@@ -70,5 +78,9 @@ local function main()
     end
 end
 
-print(pcall(main))
-print(debug.traceback())
+xpcall(main, function (error)
+    print(debug.traceback(error, 2))
+end)
+
+--print(pcall(main))
+--print(debug.traceback())

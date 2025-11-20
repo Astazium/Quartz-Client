@@ -27,10 +27,14 @@ local protect_app = {}
 
 for key, val in pairs(app) do
     protect_app[key] = function (...)
-        if parse_path(debug.getinfo(2).source) == PACK_ID then
+        if parse_path(debug.getinfo(2).source) == "quartz" then
             return val(...)
         end
     end
+end
+
+protect_app.reset_content = function ()
+    app.reset_content({"quartz"})
 end
 
 _G["external_app"] = protect_app
@@ -50,37 +54,4 @@ _G["external_app"] = protect_app
 --     document.info.text = reason or "@menu.Unexpect_Disconnected"
 -- end
 
-require "quartz:constants"
-require "quartz:std/stdboot"
-require "quartz:init/client"
-local Client = require "quartz:multiplayer/client/client"
-
-local major, minor = app.get_version()
-if (major > 0) or (major == 0 and minor >= 29) then
-    local env = __vc__pack_envs["quartz"]
-    for k, v in pairs(env) do
-        _G[k] = v
-    end
-end
-
-table.insert(CONTENT_PACKS, "quartz")
-
-local client = Client.new()
-
-menu.page = "servers"
-
-_G["/$p"] = table.copy(package.loaded)
-
-local function main()
-    while true do
-        client:tick()
-        app.tick()
-    end
-end
-
-xpcall(main, function (error)
-    print(debug.traceback(error, 2))
-end)
-
---print(pcall(main))
---print(debug.traceback())
+require "quartz:init/quartz"

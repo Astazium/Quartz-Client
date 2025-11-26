@@ -1,3 +1,10 @@
+local default_player_icons = {
+    entity = "gui/entity",
+    friend = "gui/friend",
+}
+
+local custom_icons = {}
+
 function place_player(info)
     document.player_list:add(gui.template("player", info))
 end
@@ -12,30 +19,22 @@ function player(id)
     local is_friend = table.has(CONFIG.Account.friends, id)
 
     local custom_icon = nil
-    if  document["player_icon_" .. id].src ~= "gui/friend" and
-        document["player_icon_" .. id].src ~= "gui/entity"
-    then
+    if not table.has(default_player_icons, document["player_icon_" .. id].src) then
         custom_icon = document["player_icon_" .. id].src
     end
 
     if is_friend then
-        document["player_icon_" .. id].src = "gui/entity"
+        document["player_icon_" .. id].src = custom_icon or default_player_icons.entity
         document["player_action_" .. id].src = "gui/invite_friend"
         table.remove_value(CONFIG.Account.friends, name)
     else
-        document["player_icon_" .. id].src = "gui/friend"
+        document["player_icon_" .. id].src = custom_icon or default_player_icons.entity
         document["player_action_" .. id].src = "gui/delete_friend"
         table.insert(CONFIG.Account.friends, name)
     end
 
-    if custom_icon then
-        document["player_icon_" .. id].src = custom_icon
-    end
-
     file.write(CONFIG_PATH, json.tostring(CONFIG))
 end
-
-local custom_icons = {}
 
 function update()
     local players_online = table.count_pairs(PLAYER_LIST or {})
@@ -67,13 +66,9 @@ function update()
             action = "gui/invite_friend"
         end
 
-        if custom_icons[player.name] then
-            icon = custom_icons[player.name]
-        end
-
         place_player({
             id = player.name,
-            player_icon = icon,
+            player_icon = custom_icons[player.name] or icon,
             player_pid = "PID: " .. player.pid,
             player_name = player.name,
             player_action = action
@@ -93,7 +88,7 @@ function on_open()
                 return document["player_icon_" .. player.name].src
             end)
 
-            if ok and icon and icon ~= "gui/friend" and icon ~= "gui/entity" then
+            if (ok and icon) and not table.has(default_player_icons, icon) then
                 custom_icons[player.name] = icon
             end
         end

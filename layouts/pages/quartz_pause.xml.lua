@@ -28,7 +28,7 @@ function player(id)
         document["player_action_" .. id].src = "gui/invite_friend"
         table.remove_value(CONFIG.Account.friends, name)
     else
-        document["player_icon_" .. id].src = custom_icon or default_player_icons.entity
+        document["player_icon_" .. id].src = custom_icon or default_player_icons.friend
         document["player_action_" .. id].src = "gui/delete_friend"
         table.insert(CONFIG.Account.friends, name)
     end
@@ -59,10 +59,10 @@ function update()
         local action = nil
 
         if table.has(friends, player.name) then
-            icon = "gui/friend"
+            icon = default_player_icons.friend
             action = "gui/delete_friend"
         else
-            icon = "gui/entity"
+            icon = default_player_icons.entity
             action = "gui/invite_friend"
         end
 
